@@ -1,0 +1,118 @@
+@startuml BPMN_Cafetin
+
+title BPMN - Interaccion Cliente con el Sistema
+
+skinparam defaultFontSize 10
+skinparam activityFontSize 10
+skinparam ArrowFontSize 9
+skinparam padding 2
+skinparam roundCorner 5
+
+|#E6F7FF|Cliente|
+|#E8F5E9|Frontend|
+|#FFF8E1|Backend|
+
+|Cliente|
+start
+:Abrir aplicacion;
+
+|Frontend|
+:Cargar interfaz;
+:Solicitar lista de productos;
+
+|Backend|
+:Consultar base de datos;
+:Retornar productos;
+
+|Frontend|
+:Mostrar catalogo (RF1);
+
+|Cliente|
+:Ver productos disponibles;
+
+if (Hay productos?) then (Si)
+
+    :Seleccionar producto;
+
+    |Frontend|
+    :Mostrar detalle del producto;
+
+    |Cliente|
+    :Agregar al carrito;
+
+    |Frontend|
+    :Actualizar vista del carrito (RF2);
+
+    |Backend|
+    :Guardar carrito en sesion;
+
+    |Cliente|
+    while (Agregar mas productos?) is (Si)
+        :Seleccionar otro producto;
+        |Frontend|
+        :Agregar al carrito;
+        |Backend|
+        :Actualizar sesion;
+        |Cliente|
+    endwhile (No)
+
+    if (Quitar algun producto?) then (Si)
+        :Seleccionar producto a quitar;
+        |Frontend|
+        :Eliminar del carrito (RF2);
+        |Backend|
+        :Actualizar sesion;
+        |Cliente|
+    else (No)
+    endif
+
+    |Frontend|
+    :Mostrar resumen del carrito;
+    :Validar carrito no vacio (RN1);
+
+    if (Carrito vacio?) then (Si)
+        :Mostrar error: Agregue productos;
+        |Cliente|
+        stop
+    else (No)
+    endif
+
+    |Cliente|
+    :Revisar resumen del pedido;
+
+    if (Confirmar pedido?) then (Si)
+
+        |Frontend|
+        :Enviar pedido al servidor (RF3);
+
+        |Backend|
+        :Recibir pedido;
+        :Validar datos del pedido;
+        :Registrar pedido en BD (RN2);
+        :Asignar numero de orden (RN3);
+        :Bloquear modificaciones (RN4);
+        :Enviar confirmacion;
+
+        |Frontend|
+        :Mostrar mensaje de exito;
+        :Mostrar numero de pedido;
+
+        |Cliente|
+        #98FB98:Pedido confirmado;
+
+    else (No)
+        |Frontend|
+        :Mantener carrito activo;
+        |Cliente|
+        :Volver al catalogo;
+    endif
+
+else (No)
+    |Frontend|
+    :Mostrar mensaje sin stock (SHOULD);
+    |Cliente|
+endif
+
+stop
+
+@enduml

@@ -1,0 +1,80 @@
+@startuml Diagrama_Flujo_Cafetin
+
+title Sistema de Pedidos del Cafetin
+
+skinparam defaultFontSize 11
+skinparam activityFontSize 11
+skinparam ArrowFontSize 10
+skinparam padding 3
+skinparam roundCorner 8
+
+skinparam activity {
+    BackgroundColor #FFFACD
+    BorderColor #FF8C00
+    FontColor #333333
+    BorderThickness 1
+}
+
+skinparam activityDiamond {
+    BackgroundColor #E6F3FF
+    BorderColor #4169E1
+    FontSize 10
+}
+
+|Cliente|
+start
+
+#LightBlue:Acceder al sistema;
+
+#90EE90:Mostrar productos (RF1);
+
+if (Productos disponibles?) then (Si)
+
+    #FFFACD:Seleccionar producto;
+
+    #90EE90:Agregar al carrito (RF2);
+
+    while (Mas productos?) is (Si)
+        #FFFACD:Seleccionar;
+        #90EE90:Agregar;
+    endwhile (No)
+
+    if (Quitar alguno?) then (Si)
+        #FFB6C1:Quitar (RF2);
+    else (No)
+    endif
+
+    if (Carrito vacio? RN1) then (Si)
+        #FF6347:Error Sin productos;
+        stop
+    else (No)
+    endif
+
+    #FFFACD:Revisar carrito;
+
+    if (Confirmar?) then (Si)
+        #90EE90:Confirmar (RF3);
+        #87CEEB:Registrar (RN2);
+        #87CEEB:Ordenar (RN3);
+        #87CEEB:Bloquear (RN4);
+        #98FB98:Pedido enviado;
+
+        |Administrador|
+        #LightBlue:Ver pedidos (RF4);
+        #FFFACD:Atender en orden (RN3);
+        #90EE90:Preparar pedido;
+        #98FB98:Pedido completado;
+
+    else (No)
+        #FFB6C1:Cancelar;
+        stop
+    endif
+
+else (No)
+    #FF6347:Sin stock;
+    stop
+endif
+
+stop
+
+@enduml
