@@ -1,8 +1,11 @@
 package com.sena.test.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -16,35 +19,30 @@ public class User {
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
-    @JsonIgnore  
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
     @Column(name = "user_name", nullable = false, length = 100)
     private String userName;
 
-    @JsonIgnore  
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id_person", nullable = false)
     private Person person;
 
-    @ManyToMany
-    @JoinTable(
-        name = "user_role",
-        joinColumns = @JoinColumn(name = "id_user"),
-        inverseJoinColumns = @JoinColumn(name = "id_role")
-    )
-    private List<Role> roles;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserRole> userRoles = new ArrayList<>();
 
     public User() {}
 
-    public User(Integer id, String email, String password, String userName, Person person, List<Role> roles) {
+    public User(Integer id, String email, String password, String userName, Person person, List<UserRole> userRoles) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.userName = userName;
         this.person = person;
-        this.roles = roles;
+        this.userRoles = userRoles;
     }
 
     public Integer getId() { return id; }
@@ -62,6 +60,6 @@ public class User {
     public Person getPerson() { return person; }
     public void setPerson(Person person) { this.person = person; }
 
-    public List<Role> getRoles() { return roles; }
-    public void setRoles(List<Role> roles) { this.roles = roles; }
+    public List<UserRole> getUserRoles() { return userRoles; }
+    public void setUserRoles(List<UserRole> userRoles) { this.userRoles = userRoles; }
 }
