@@ -1,6 +1,4 @@
 
---  CAFETERÍA 
-
 -- 1. type_document
 
 INSERT INTO type_document (id, name, code, description) VALUES
@@ -17,7 +15,7 @@ INSERT INTO type_document (id, name, code, description) VALUES
 
 
 
--- 2. person (usuarios/proveedores)
+-- 2. person (usuarios/proveedores) // hola mundooo
 
 INSERT INTO person (id, type_document_id, document_number, first_name, last_name, phone, email) VALUES
 ('b1000000-0000-0000-0000-000000000001', 'a1000000-0000-0000-0000-000000000001', '10001001', 'Carlos',    'Ramírez',   '3001000001', 'carlos.ramirez@email.com'),
