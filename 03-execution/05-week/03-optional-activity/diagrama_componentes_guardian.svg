@@ -1,0 +1,121 @@
+<svg width="900" height="660" viewBox="0 0 900 660" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; font-family: Arial, Helvetica, sans-serif;">
+<defs>
+  <marker id="arrC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M1 1L9 5L1 9" fill="none" stroke="#e9a825" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arrB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M1 1L9 5L1 9" fill="none" stroke="#555" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- TÍTULO -->
+<text x="450" y="36" text-anchor="middle" font-size="17" font-weight="700" fill="#222" letter-spacing="1">GPS GUARDIAN ESCOLAR — DIAGRAMA DE COMPONENTES</text>
+
+<!-- ===== App del estudiante ===== -->
+<rect x="30" y="100" width="150" height="60" fill="#fff" stroke="#2a9d8f" stroke-width="1.8"/>
+<text x="105" y="126" text-anchor="middle" font-size="11" fill="#222">App del estudiante</text>
+<text x="105" y="141" text-anchor="middle" font-size="9" fill="#555">Android · Envía GPS</text>
+<rect x="158" y="93"  width="18" height="14" fill="#fff" stroke="#2a9d8f" stroke-width="1.5"/>
+<rect x="154" y="97"  width="8"  height="4"  fill="#fff" stroke="#2a9d8f" stroke-width="1.2"/>
+<rect x="154" y="104" width="8"  height="4"  fill="#fff" stroke="#2a9d8f" stroke-width="1.2"/>
+
+<!-- ===== App del padre ===== -->
+<rect x="30" y="290" width="150" height="60" fill="#fff" stroke="#2a9d8f" stroke-width="1.8"/>
+<text x="105" y="316" text-anchor="middle" font-size="11" fill="#222">App del padre</text>
+<text x="105" y="331" text-anchor="middle" font-size="9" fill="#555">Android · Ver mapa</text>
+<rect x="158" y="283" width="18" height="14" fill="#fff" stroke="#2a9d8f" stroke-width="1.5"/>
+<rect x="154" y="287" width="8"  height="4"  fill="#fff" stroke="#2a9d8f" stroke-width="1.2"/>
+<rect x="154" y="294" width="8"  height="4"  fill="#fff" stroke="#2a9d8f" stroke-width="1.2"/>
+
+<!-- ===== Panel web admin ===== -->
+<rect x="30" y="480" width="150" height="60" fill="#fff" stroke="#2a9d8f" stroke-width="1.8"/>
+<text x="105" y="506" text-anchor="middle" font-size="11" fill="#222">Panel web admin</text>
+<text x="105" y="521" text-anchor="middle" font-size="9" fill="#555">Windows · Chrome</text>
+<rect x="158" y="473" width="18" height="14" fill="#fff" stroke="#2a9d8f" stroke-width="1.5"/>
+<rect x="154" y="477" width="8"  height="4"  fill="#fff" stroke="#2a9d8f" stroke-width="1.2"/>
+<rect x="154" y="484" width="8"  height="4"  fill="#fff" stroke="#2a9d8f" stroke-width="1.2"/>
+
+<!-- flechas clientes → API -->
+<line x1="180" y1="130" x2="310" y2="292" stroke="#e9a825" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrC)"/>
+<line x1="180" y1="320" x2="270" y2="320" stroke="#e9a825" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrC)"/>
+<line x1="180" y1="510" x2="310" y2="348" stroke="#e9a825" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrC)"/>
+
+<!-- ===== API principal ===== -->
+<rect x="270" y="290" width="155" height="60" fill="#fff" stroke="#2a9d8f" stroke-width="1.8"/>
+<text x="347" y="316" text-anchor="middle" font-size="11" fill="#222">API principal</text>
+<text x="347" y="331" text-anchor="middle" font-size="9" fill="#555">HTTPS · JWT</text>
+<rect x="403" y="283" width="18" height="14" fill="#fff" stroke="#2a9d8f" stroke-width="1.5"/>
+<rect x="399" y="287" width="8"  height="4"  fill="#fff" stroke="#2a9d8f" stroke-width="1.2"/>
+<rect x="399" y="294" width="8"  height="4"  fill="#fff" stroke="#2a9d8f" stroke-width="1.2"/>
+
+<!-- flechas API → módulos -->
+<line x1="425" y1="305" x2="530" y2="145" stroke="#e9a825" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrC)"/>
+<line x1="425" y1="312" x2="530" y2="235" stroke="#e9a825" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrC)"/>
+<line x1="425" y1="320" x2="530" y2="320" stroke="#e9a825" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrC)"/>
+<line x1="425" y1="328" x2="530" y2="408" stroke="#e9a825" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrC)"/>
+<line x1="425" y1="335" x2="530" y2="498" stroke="#e9a825" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrC)"/>
+
+<!-- ===== Módulo: Login y usuarios ===== -->
+<rect x="530" y="110" width="155" height="60" fill="#fff" stroke="#3d5a99" stroke-width="1.8"/>
+<text x="607" y="136" text-anchor="middle" font-size="11" fill="#222">Login y usuarios</text>
+<text x="607" y="151" text-anchor="middle" font-size="9" fill="#555">Registro · Contraseñas</text>
+<rect x="663" y="103" width="18" height="14" fill="#fff" stroke="#3d5a99" stroke-width="1.5"/>
+<rect x="659" y="107" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+<rect x="659" y="114" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+
+<!-- ===== Módulo: Datos del estudiante ===== -->
+<rect x="530" y="200" width="155" height="60" fill="#fff" stroke="#3d5a99" stroke-width="1.8"/>
+<text x="607" y="226" text-anchor="middle" font-size="11" fill="#222">Datos del estudiante</text>
+<text x="607" y="241" text-anchor="middle" font-size="9" fill="#555">Nombre · Grado · Ruta</text>
+<rect x="663" y="193" width="18" height="14" fill="#fff" stroke="#3d5a99" stroke-width="1.5"/>
+<rect x="659" y="197" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+<rect x="659" y="204" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+
+<!-- ===== Módulo: Rastreo GPS ===== -->
+<rect x="530" y="290" width="155" height="60" fill="#fff" stroke="#3d5a99" stroke-width="1.8"/>
+<text x="607" y="316" text-anchor="middle" font-size="11" fill="#222">Rastreo GPS</text>
+<text x="607" y="331" text-anchor="middle" font-size="9" fill="#555">Ubicación cada 30 seg</text>
+<rect x="663" y="283" width="18" height="14" fill="#fff" stroke="#3d5a99" stroke-width="1.5"/>
+<rect x="659" y="287" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+<rect x="659" y="294" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+
+<!-- ===== Módulo: Alertas y avisos ===== -->
+<rect x="530" y="378" width="155" height="60" fill="#fff" stroke="#3d5a99" stroke-width="1.8"/>
+<text x="607" y="404" text-anchor="middle" font-size="11" fill="#222">Alertas y avisos</text>
+<text x="607" y="419" text-anchor="middle" font-size="9" fill="#555">Retraso · Desvío · Llegada</text>
+<rect x="663" y="371" width="18" height="14" fill="#fff" stroke="#3d5a99" stroke-width="1.5"/>
+<rect x="659" y="375" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+<rect x="659" y="382" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+
+<!-- ===== Módulo: Rutas y paradas ===== -->
+<rect x="530" y="468" width="155" height="60" fill="#fff" stroke="#3d5a99" stroke-width="1.8"/>
+<text x="607" y="494" text-anchor="middle" font-size="11" fill="#222">Rutas y paradas</text>
+<text x="607" y="509" text-anchor="middle" font-size="9" fill="#555">Horarios · Recorridos</text>
+<rect x="663" y="461" width="18" height="14" fill="#fff" stroke="#3d5a99" stroke-width="1.5"/>
+<rect x="659" y="465" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+<rect x="659" y="472" width="8"  height="4"  fill="#fff" stroke="#3d5a99" stroke-width="1.2"/>
+
+<!-- línea vertical derecha conectando módulos -->
+<line x1="760" y1="140" x2="760" y2="498" stroke="#e9a825" stroke-width="1.5"/>
+<line x1="685" y1="140" x2="760" y2="140" stroke="#e9a825" stroke-width="1.5"/>
+<line x1="685" y1="230" x2="760" y2="230" stroke="#e9a825" stroke-width="1.5"/>
+<line x1="685" y1="320" x2="760" y2="320" stroke="#e9a825" stroke-width="1.5"/>
+<line x1="685" y1="408" x2="760" y2="408" stroke="#e9a825" stroke-width="1.5"/>
+<line x1="685" y1="498" x2="760" y2="498" stroke="#e9a825" stroke-width="1.5"/>
+
+<!-- círculo interfaz → Base de datos -->
+<circle cx="607" cy="528" r="7" fill="#fff" stroke="#e9a825" stroke-width="1.5"/>
+<line x1="607" y1="535" x2="607" y2="568" stroke="#e9a825" stroke-width="1.5" marker-end="url(#arrC)"/>
+
+<!-- ===== Base de datos ===== -->
+<rect x="530" y="568" width="155" height="60" fill="#fff" stroke="#333" stroke-width="1.8"/>
+<text x="607" y="594" text-anchor="middle" font-size="11" fill="#222">Base de datos</text>
+<text x="607" y="609" text-anchor="middle" font-size="9" fill="#555">PostgreSQL · 20 tablas</text>
+<rect x="663" y="561" width="18" height="14" fill="#fff" stroke="#333" stroke-width="1.5"/>
+<rect x="659" y="565" width="8"  height="4"  fill="#fff" stroke="#333" stroke-width="1.2"/>
+<rect x="659" y="572" width="8"  height="4"  fill="#fff" stroke="#333" stroke-width="1.2"/>
+
+<!-- círculo interfaz API → BD -->
+<circle cx="347" cy="378" r="7" fill="#fff" stroke="#e9a825" stroke-width="1.5"/>
+<line x1="347" y1="385" x2="530" y2="590" stroke="#e9a825" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrC)"/>
+</svg>
