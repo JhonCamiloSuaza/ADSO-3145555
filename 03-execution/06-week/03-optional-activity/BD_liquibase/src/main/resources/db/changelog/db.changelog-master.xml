@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <!-- 1. Crear tabla usuarios -->
+    <changeSet id="1" author="camilo">
+        <createTable tableName="usuarios">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nombre" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- 2. Crear tabla productos -->
+    <changeSet id="2" author="camilo">
+        <createTable tableName="productos">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nombre" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="precio" type="NUMERIC(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="usuario_id" type="BIGINT">
+                <constraints nullable="true"
+                    foreignKeyName="fk_productos_usuario"
+                    references="usuarios(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- 3. Agregar columna email a usuarios -->
+    <changeSet id="3" author="camilo">
+        <addColumn tableName="usuarios">
+            <column name="email" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- 4. Agregar columna celular a usuarios -->
+    <changeSet id="4" author="camilo">
+        <addColumn tableName="usuarios">
+            <column name="celular" type="VARCHAR(20)"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- 5. Agregar columna direccion a usuarios -->
+    <changeSet id="5" author="camilo">
+        <addColumn tableName="usuarios">
+            <column name="direccion" type="VARCHAR(150)"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- 6. Insertar datos en usuarios -->
+    <changeSet id="6" author="camilo">
+        <insert tableName="usuarios">
+            <column name="nombre" value="Juan"/>
+            <column name="email" value="juan@example.com"/>
+            <column name="celular" value="12"/>
+            <column name="direccion" value="Calle 1"/>
+        </insert>
+        <insert tableName="usuarios">
+            <column name="nombre" value="Ana"/>
+            <column name="email" value="ana@example.com"/>
+            <column name="celular" value="123"/>
+            <column name="direccion" value="Calle 2"/>
+        </insert>
+    </changeSet>
+
+    <!-- 7. Insertar datos en productos -->
+    <changeSet id="7" author="camilo">
+        <insert tableName="productos">
+            <column name="nombre" value="Laptop"/>
+            <column name="precio" valueNumeric="3500.50"/>
+            <column name="usuario_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Mouse"/>
+            <column name="precio" valueNumeric="50.00"/>
+            <column name="usuario_id" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+
+    <!-- 8. Actualizar celular de usuarios existentes -->
+    <changeSet id="8" author="camilo">
+        <update tableName="usuarios">
+            <column name="celular" value="012"/>
+            <where>nombre='Juan'</where>
+        </update>
+        <update tableName="usuarios">
+            <column name="celular" value="345"/>
+            <where>nombre='Ana'</where>
+        </update>
+    </changeSet>
+
+    <!-- 9. Insertar nuevo usuario -->
+    <changeSet id="9" author="camilo">
+        <insert tableName="usuarios">
+            <column name="nombre" value="Carlos"/>
+            <column name="email" value="carlos@example.com"/>
+            <column name="celular" value="678"/>
+            <column name="direccion" value="Calle 3"/>
+        </insert>
+    </changeSet>
+
+    <!-- 10. Cambiar nombre de Juan a Juan Pablo -->
+<changeSet id="10" author="camilo">
+    <update tableName="usuarios">
+        <column name="nombre" value="Pablo"/>
+        <where>nombre='Juan'</where>
+    </update>
+</changeSet>
+
+<!-- 11. Cambiar email de Juan Pablo -->
+<changeSet id="11" author="camilo">
+    <update tableName="usuarios">
+        <column name="email" value="pablo@example.com"/>
+        <where>nombre='Juan Pablo'</where>
+    </update>
+</changeSet>
+
+<!-- 12. Corregir email de Pablo -->
+<changeSet id="12" author="camilo">
+    <update tableName="usuarios">
+        <column name="email" value="pablo@example.com"/>
+        <where>nombre='Pablo'</where>
+    </update>
+</changeSet>
+
+</databaseChangeLog>
