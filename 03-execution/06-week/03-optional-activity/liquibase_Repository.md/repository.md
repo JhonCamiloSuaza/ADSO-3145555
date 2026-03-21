@@ -1,5 +1,4 @@
 #Repositorio de la actividad
-https://github.com/JhonCamiloSuaza/Taller_liquibase (Lo que no se debe hacer)
 https://github.com/JhonCamiloSuaza/Onee-prueba-liquibase (lo que si debe hacer: todas las aramas separadas                                → Initial commit
 ├── develop   → nació desde main → "inicio develop"
 │    └── HU-01-develop  → nació desde develop → implementar cambios
