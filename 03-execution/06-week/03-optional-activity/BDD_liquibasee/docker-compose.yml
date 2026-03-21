@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+
+  liquibase:
+    image: liquibase/liquibase:latest
+    container_name: liquibase_contenedor
+    volumes:
+      - ./src/main/resources/db/changelog:/liquibase/changelog
+      - ./drivers/postgresql-42.7.3.jar:/liquibase/lib/postgresql-42.7.3.jar
+    command: >
+      --url=jdbc:postgresql://host.docker.internal:5432/liquibase_db
+      --username=${DB_USERNAME}
+      --password=${DB_PASSWORD}
+      --changeLogFile=db.changelog-master.xml
+      --searchPath=/liquibase/changelog
+      update

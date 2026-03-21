@@ -23,3 +23,5 @@ Initial commit      ← base en main
 inicio develop      ← develop nació desde main
       │
 inicio qa           ← qa nació desde develop
+
+https://github.com/JhonCamiloSuaza/Oneee_prueba-liquibase : con liquibase
