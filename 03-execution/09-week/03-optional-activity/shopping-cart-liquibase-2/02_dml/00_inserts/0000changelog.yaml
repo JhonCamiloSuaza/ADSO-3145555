@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9ec09d36-0d2b-42b1-b722-a014da3f0c59
+      author: JhonCamiloSuaza
+      labels: "insert data,dml,role,security"
+      comment: "Inserts the baseline roles into the security schema."
+      changes:
+        - sqlFile:
+            path: 001_insert_role.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/02_dml/00_inserts/001_insert_role.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
+  - changeSet:
+      id: 4a2b9e1c-d3f4-5g6h-7i8j-9k0l1m2n3o4p
+      author: JhonCamiloSuaza
+      labels: "insert data,dml,expansion,enterprise"
+      comment: "Inserts additional data for brands and payment methods."
+      changes:
+        - sqlFile:
+            path: 002_insert_new_data.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/02_dml/00_inserts/002_insert_new_data.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
