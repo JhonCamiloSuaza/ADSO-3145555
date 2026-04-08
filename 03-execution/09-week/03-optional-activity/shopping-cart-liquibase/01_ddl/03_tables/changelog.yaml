@@ -1,0 +1,145 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-security-tables
+      author: Jhon Camilo Suaza Sanchez
+      logicalFilePath: db/changelog/changes/001_base/003_create_security_tables.sql
+      labels: "BD-01-dev,ddl,base,security"
+      comment: Creates the baseline tables for the security module.
+      changes:
+        - sqlFile:
+            path: 001_create_security_tables.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/001_create_security_tables.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
+  - changeSet:
+      id: 004-create-inventory-tables
+      author: Jhon Camilo Suaza Sanchez
+      logicalFilePath: db/changelog/changes/001_base/004_create_inventory_tables.sql
+      labels: "BD-01-dev,ddl,base,inventory"
+      comment: Creates the baseline tables for the inventory module.
+      changes:
+        - sqlFile:
+            path: 002_create_inventory_tables.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/002_create_inventory_tables.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
+  - changeSet:
+      id: 005-create-billing-tables
+      author: Jhon Camilo Suaza Sanchez
+      logicalFilePath: db/changelog/changes/001_base/005_create_billing_tables.sql
+      labels: "BD-01-dev,ddl,base,billing"
+      comment: Creates the baseline tables for the billing module.
+      changes:
+        - sqlFile:
+            path: 003_create_billing_tables.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/003_create_billing_tables.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
+  - changeSet:
+      id: 006-create-permission-table
+      author: Jhon Camilo Suaza Sanchez
+      logicalFilePath: db/changelog/changes/001_base/006_create_permission_table.sql
+      labels: "BD-01-dev,ddl,base,security"
+      comment: Creates the permission table for the security module.
+      changes:
+        - sqlFile:
+            path: 004_create_permission_table.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/004_create_permission_table.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
+  - changeSet:
+      id: 007-create-brand-table
+      author: Jhon Camilo Suaza Sanchez
+      logicalFilePath: db/changelog/changes/001_base/007_create_brand_table.sql
+      labels: "BD-01-dev,ddl,base,inventory"
+      comment: Creates the brand table for the inventory module.
+      changes:
+        - sqlFile:
+            path: 005_create_brand_table.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/005_create_brand_table.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
+  - changeSet:
+      id: 008-create-tax-table
+      author: Jhon Camilo Suaza Sanchez
+      logicalFilePath: db/changelog/changes/001_base/008_create_tax_table.sql
+      labels: "BD-01-dev,ddl,base,billing"
+      comment: Creates the tax table for the billing module.
+      changes:
+        - sqlFile:
+            path: 006_create_tax_table.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/006_create_tax_table.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
+  - changeSet:
+      id: 009-create-audit-table
+      author: Jhon Camilo Suaza Sanchez
+      logicalFilePath: db/changelog/changes/001_base/009_create_audit_table.sql
+      labels: "BD-01-dev,ddl,base,security"
+      comment: Creates the audit log table for the security module.
+      changes:
+        - sqlFile:
+            path: 007_create_audit_table.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/007_create_audit_table.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
+  - changeSet:
+      id: 010-create-supplier-table
+      author: Jhon Camilo Suaza Sanchez
+      logicalFilePath: db/changelog/changes/001_base/010_create_supplier_table.sql
+      labels: "BD-01-dev,ddl,base,inventory"
+      comment: Creates the supplier table for the inventory module.
+      changes:
+        - sqlFile:
+            path: 008_create_supplier_table.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/008_create_supplier_table.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
+  - changeSet:
+      id: 011-create-payment-table
+      author: Jhon Camilo Suaza Sanchez
+      logicalFilePath: db/changelog/changes/001_base/011_create_payment_table.sql
+      labels: "BD-01-dev,ddl,base,billing"
+      comment: Creates the payment method table for the billing module.
+      changes:
+        - sqlFile:
+            path: 009_create_payment_table.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/009_create_payment_table.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
