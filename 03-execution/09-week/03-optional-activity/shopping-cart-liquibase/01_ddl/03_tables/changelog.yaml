@@ -143,3 +143,18 @@ databaseChangeLog:
             path: ../../05_rollbacks/01_ddl/03_tables/009_create_payment_table.rollback.sql
             relativeToChangelogFile: true
             stripComments: false
+  - changeSet:
+      id: 012-create-review-table
+      author: Jhon Camilo Suaza Sanchez
+      labels: "BD-01-dev,ddl,expansion,enterprise"
+      comment: Creates the product review table for the inventory module.
+      changes:
+        - sqlFile:
+            path: 010_create_review_table.sql
+            relativeToChangelogFile: true
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/010_create_review_table.rollback.sql
+            relativeToChangelogFile: true
+            stripComments: false
