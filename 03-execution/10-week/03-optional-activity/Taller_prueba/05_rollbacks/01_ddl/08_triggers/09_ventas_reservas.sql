@@ -1,0 +1,16 @@
+DROP TRIGGER IF EXISTS trg_baggage_upd ON baggage;
+DROP TRIGGER IF EXISTS trg_baggage_status_upd ON baggage_status;
+DROP TRIGGER IF EXISTS trg_baggage_type_upd ON baggage_type;
+DROP TRIGGER IF EXISTS trg_seat_assignment_upd ON seat_assignment;
+DROP TRIGGER IF EXISTS trg_assignment_source_upd ON assignment_source;
+DROP TRIGGER IF EXISTS trg_ticket_segment_upd ON ticket_segment;
+DROP TRIGGER IF EXISTS trg_ticket_upd ON ticket;
+DROP TRIGGER IF EXISTS trg_sale_upd ON sale;
+DROP TRIGGER IF EXISTS trg_reservation_passenger_upd ON reservation_passenger;
+DROP TRIGGER IF EXISTS trg_passenger_type_upd ON passenger_type;
+DROP TRIGGER IF EXISTS trg_reservation_upd ON reservation;
+DROP TRIGGER IF EXISTS trg_ticket_status_upd ON ticket_status;
+DROP TRIGGER IF EXISTS trg_fare_upd ON fare;
+DROP TRIGGER IF EXISTS trg_fare_class_upd ON fare_class;
+DROP TRIGGER IF EXISTS trg_sale_channel_upd ON sale_channel;
+DROP TRIGGER IF EXISTS trg_reservation_status_upd ON reservation_status;

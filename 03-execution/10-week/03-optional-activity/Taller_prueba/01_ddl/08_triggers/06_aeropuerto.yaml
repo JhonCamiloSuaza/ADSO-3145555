@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: "aeropuerto-triggers-1"
+      author: "HU-07dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_airport_upd BEFORE UPDATE ON airport FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_terminal_upd BEFORE UPDATE ON terminal FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_boarding_gate_upd BEFORE UPDATE ON boarding_gate FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_runway_upd BEFORE UPDATE ON runway FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_airport_regulation_upd BEFORE UPDATE ON airport_regulation FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_airport_regulation_upd ON airport_regulation;
+              DROP TRIGGER IF EXISTS trg_runway_upd ON runway;
+              DROP TRIGGER IF EXISTS trg_boarding_gate_upd ON boarding_gate;
+              DROP TRIGGER IF EXISTS trg_terminal_upd ON terminal;
+              DROP TRIGGER IF EXISTS trg_airport_upd ON airport;

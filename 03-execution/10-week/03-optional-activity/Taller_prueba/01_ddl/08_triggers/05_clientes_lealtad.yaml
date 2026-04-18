@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: "clientes-lealtad-triggers-1"
+      author: "HU-06dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_customer_category_upd BEFORE UPDATE ON customer_category FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_benefit_type_upd BEFORE UPDATE ON benefit_type FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_loyalty_program_upd BEFORE UPDATE ON loyalty_program FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_loyalty_tier_upd BEFORE UPDATE ON loyalty_tier FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_customer_upd BEFORE UPDATE ON customer FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_loyalty_account_upd BEFORE UPDATE ON loyalty_account FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_loyalty_account_tier_upd BEFORE UPDATE ON loyalty_account_tier FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_miles_transaction_upd BEFORE UPDATE ON miles_transaction FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_customer_benefit_upd BEFORE UPDATE ON customer_benefit FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_customer_benefit_upd ON customer_benefit;
+              DROP TRIGGER IF EXISTS trg_miles_transaction_upd ON miles_transaction;
+              DROP TRIGGER IF EXISTS trg_loyalty_account_tier_upd ON loyalty_account_tier;
+              DROP TRIGGER IF EXISTS trg_loyalty_account_upd ON loyalty_account;
+              DROP TRIGGER IF EXISTS trg_customer_upd ON customer;
+              DROP TRIGGER IF EXISTS trg_loyalty_tier_upd ON loyalty_tier;
+              DROP TRIGGER IF EXISTS trg_loyalty_program_upd ON loyalty_program;
+              DROP TRIGGER IF EXISTS trg_benefit_type_upd ON benefit_type;
+              DROP TRIGGER IF EXISTS trg_customer_category_upd ON customer_category;

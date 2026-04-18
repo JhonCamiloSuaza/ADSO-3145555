@@ -1,0 +1,10 @@
+DROP TRIGGER IF EXISTS trg_maintenance_event_upd ON maintenance_event;
+DROP TRIGGER IF EXISTS trg_maintenance_status_upd ON maintenance_status;
+DROP TRIGGER IF EXISTS trg_maintenance_type_upd ON maintenance_type;
+DROP TRIGGER IF EXISTS trg_maintenance_provider_upd ON maintenance_provider;
+DROP TRIGGER IF EXISTS trg_aircraft_seat_upd ON aircraft_seat;
+DROP TRIGGER IF EXISTS trg_aircraft_cabin_upd ON aircraft_cabin;
+DROP TRIGGER IF EXISTS trg_aircraft_upd ON aircraft;
+DROP TRIGGER IF EXISTS trg_cabin_class_upd ON cabin_class;
+DROP TRIGGER IF EXISTS trg_aircraft_model_upd ON aircraft_model;
+DROP TRIGGER IF EXISTS trg_aircraft_manufacturer_upd ON aircraft_manufacturer;

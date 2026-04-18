@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: "master-basics-1"
+      author: "HU-16dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- Gender
+              INSERT INTO gender (gender_code, gender_name) VALUES ('M', 'Male'), ('F', 'Female'), ('X', 'Non-Binary'), ('U', 'Unknown');
+              
+              -- Passenger Type
+              INSERT INTO passenger_type (type_code, type_name) VALUES ('ADULT', 'Adult'), ('CHILD', 'Child'), ('INFANT', 'Infant');
+              
+              -- Baggage Type
+              INSERT INTO baggage_type (type_code, type_name) VALUES ('CARRY_ON', 'Carry On'), ('CHECKED', 'Checked Bag'), ('SPECIAL', 'Special Items');
+              
+              -- Baggage Status
+              INSERT INTO baggage_status (status_code, status_name) VALUES ('REGISTERED', 'Registered'), ('LOADED', 'Loaded'), ('CLAIMED', 'Claimed'), ('LOST', 'Lost Tracker');
+              
+              -- Person Type
+              INSERT INTO person_type (type_code, type_name) VALUES ('PAX', 'Passenger'), ('EMP', 'Employee'), ('CREW', 'Crew Member');
+              
+              -- Document Type
+              INSERT INTO document_type (type_code, type_name) VALUES ('PASSPORT', 'Passport'), ('ID', 'National ID Card'), ('VISA', 'Visa');
+              
+              -- Contact Type
+              INSERT INTO contact_type (type_code, type_name) VALUES ('EMAIL', 'Email Address'), ('PHONE', 'Mobile Phone'), ('HOME_PHONE', 'Home Phone');
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/01_master_basics.sql"
+            relativeToChangelogFile: true

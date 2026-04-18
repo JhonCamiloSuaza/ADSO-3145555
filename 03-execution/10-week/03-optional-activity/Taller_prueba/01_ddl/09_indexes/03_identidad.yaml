@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: "identidad-indexes-1"
+      author: "HU-04dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE INDEX idx_person_person_type_id        ON person(person_type_id);
+              CREATE INDEX idx_person_nationality_country_id ON person(nationality_country_id);
+              CREATE INDEX idx_person_gender_id             ON person(gender_id);
+              CREATE INDEX idx_person_document_person_id    ON person_document(person_id);
+              CREATE INDEX idx_person_document_number       ON person_document(document_number);
+              CREATE INDEX idx_person_contact_person_id     ON person_contact(person_id);
+              CREATE INDEX idx_person_contact_value         ON person_contact(contact_value);
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP INDEX IF EXISTS idx_person_contact_value;
+              DROP INDEX IF EXISTS idx_person_contact_person_id;
+              DROP INDEX IF EXISTS idx_person_document_number;
+              DROP INDEX IF EXISTS idx_person_document_person_id;
+              DROP INDEX IF EXISTS idx_person_gender_id;
+              DROP INDEX IF EXISTS idx_person_nationality_country_id;
+              DROP INDEX IF EXISTS idx_person_person_type_id;

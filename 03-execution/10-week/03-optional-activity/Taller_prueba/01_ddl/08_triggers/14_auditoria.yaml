@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: "auditoria-triggers-1"
+      author: "HU-15dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_audit_reservation AFTER INSERT OR UPDATE OR DELETE ON reservation FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+              CREATE TRIGGER trg_audit_sale AFTER INSERT OR UPDATE OR DELETE ON sale FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+              CREATE TRIGGER trg_audit_payment AFTER INSERT OR UPDATE OR DELETE ON payment FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+              CREATE TRIGGER trg_audit_ticket AFTER INSERT OR UPDATE OR DELETE ON ticket FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+              CREATE TRIGGER trg_audit_check_in AFTER INSERT OR UPDATE OR DELETE ON check_in FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_audit_check_in ON check_in;
+              DROP TRIGGER IF EXISTS trg_audit_ticket ON ticket;
+              DROP TRIGGER IF EXISTS trg_audit_payment ON payment;
+              DROP TRIGGER IF EXISTS trg_audit_sale ON sale;
+              DROP TRIGGER IF EXISTS trg_audit_reservation ON reservation;

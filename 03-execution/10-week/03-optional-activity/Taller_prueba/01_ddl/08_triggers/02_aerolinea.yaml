@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: "airline-triggers-1"
+      author: "HU-03dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_airline_upd BEFORE UPDATE ON airline FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_airline_upd ON airline;

@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 01_comunes.yaml
+      relativeToChangelogFile: true

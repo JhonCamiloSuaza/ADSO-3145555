@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS flight_crew_assignment CASCADE;
+DROP TABLE IF EXISTS crew_member CASCADE;
+DROP TABLE IF EXISTS crew_role CASCADE;

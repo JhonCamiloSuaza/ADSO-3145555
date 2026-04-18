@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: "geografia-triggers-1"
+      author: "HU-02dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_time_zone_upd BEFORE UPDATE ON time_zone FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_continent_upd BEFORE UPDATE ON continent FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_country_upd BEFORE UPDATE ON country FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_state_province_upd BEFORE UPDATE ON state_province FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_city_upd BEFORE UPDATE ON city FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_district_upd BEFORE UPDATE ON district FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_address_upd BEFORE UPDATE ON address FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_currency_upd BEFORE UPDATE ON currency FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_time_zone_upd ON time_zone;
+              DROP TRIGGER IF EXISTS trg_continent_upd ON continent;
+              DROP TRIGGER IF EXISTS trg_country_upd ON country;
+              DROP TRIGGER IF EXISTS trg_state_province_upd ON state_province;
+              DROP TRIGGER IF EXISTS trg_city_upd ON city;
+              DROP TRIGGER IF EXISTS trg_district_upd ON district;
+              DROP TRIGGER IF EXISTS trg_address_upd ON address;
+              DROP TRIGGER IF EXISTS trg_currency_upd ON currency;

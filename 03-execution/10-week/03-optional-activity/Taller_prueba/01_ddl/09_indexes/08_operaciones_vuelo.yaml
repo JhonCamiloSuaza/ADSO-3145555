@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: "operaciones-vuelo-indexes-1"
+      author: "HU-09dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE INDEX idx_flight_aircraft_id           ON flight(aircraft_id);
+              CREATE INDEX idx_flight_service_date          ON flight(service_date);
+              CREATE INDEX idx_flight_segment_flight_id     ON flight_segment(flight_id);
+              CREATE INDEX idx_flight_segment_origin_airport_id      ON flight_segment(origin_airport_id);
+              CREATE INDEX idx_flight_segment_destination_airport_id ON flight_segment(destination_airport_id);
+              CREATE INDEX idx_flight_delay_segment_id      ON flight_delay(flight_segment_id);
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP INDEX IF EXISTS idx_flight_delay_segment_id;
+              DROP INDEX IF EXISTS idx_flight_segment_destination_airport_id;
+              DROP INDEX IF EXISTS idx_flight_segment_origin_airport_id;
+              DROP INDEX IF EXISTS idx_flight_segment_flight_id;
+              DROP INDEX IF EXISTS idx_flight_service_date;
+              DROP INDEX IF EXISTS idx_flight_aircraft_id;

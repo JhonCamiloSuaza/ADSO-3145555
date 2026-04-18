@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: "seguridad-indexes-1"
+      author: "HU-05dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE INDEX idx_user_account_status_id       ON user_account(user_status_id);
+              CREATE INDEX idx_user_role_user_account_id    ON user_role(user_account_id);
+              CREATE INDEX idx_user_role_role_id            ON user_role(security_role_id);
+              CREATE INDEX idx_role_permission_role_id      ON role_permission(security_role_id);
+              CREATE INDEX idx_role_permission_permission_id ON role_permission(security_permission_id);
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP INDEX IF EXISTS idx_role_permission_permission_id;
+              DROP INDEX IF EXISTS idx_role_permission_role_id;
+              DROP INDEX IF EXISTS idx_user_role_role_id;
+              DROP INDEX IF EXISTS idx_user_role_user_account_id;
+              DROP INDEX IF EXISTS idx_user_account_status_id;

@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: "facturacion-triggers-1"
+      author: "HU-13dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_tax_upd BEFORE UPDATE ON tax FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_exchange_rate_upd BEFORE UPDATE ON exchange_rate FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_invoice_status_upd BEFORE UPDATE ON invoice_status FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_invoice_upd BEFORE UPDATE ON invoice FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_invoice_line_upd BEFORE UPDATE ON invoice_line FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_invoice_line_upd ON invoice_line;
+              DROP TRIGGER IF EXISTS trg_invoice_upd ON invoice;
+              DROP TRIGGER IF EXISTS trg_invoice_status_upd ON invoice_status;
+              DROP TRIGGER IF EXISTS trg_exchange_rate_upd ON exchange_rate;
+              DROP TRIGGER IF EXISTS trg_tax_upd ON tax;

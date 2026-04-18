@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: "pagos-triggers-1"
+      author: "HU-12dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_payment_status_upd BEFORE UPDATE ON payment_status FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_payment_method_upd BEFORE UPDATE ON payment_method FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_payment_upd BEFORE UPDATE ON payment FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_payment_transaction_type_upd BEFORE UPDATE ON payment_transaction_type FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_payment_transaction_upd BEFORE UPDATE ON payment_transaction FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_refund_upd BEFORE UPDATE ON refund FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_refund_upd ON refund;
+              DROP TRIGGER IF EXISTS trg_payment_transaction_upd ON payment_transaction;
+              DROP TRIGGER IF EXISTS trg_payment_transaction_type_upd ON payment_transaction_type;
+              DROP TRIGGER IF EXISTS trg_payment_upd ON payment;
+              DROP TRIGGER IF EXISTS trg_payment_method_upd ON payment_method;
+              DROP TRIGGER IF EXISTS trg_payment_status_upd ON payment_status;

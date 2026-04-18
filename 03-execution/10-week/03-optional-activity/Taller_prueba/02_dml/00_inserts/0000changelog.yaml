@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: 01_master_basics.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 02_statuses_and_configs.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 03_geography.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 04_roles_and_permissions.yaml
+      relativeToChangelogFile: true

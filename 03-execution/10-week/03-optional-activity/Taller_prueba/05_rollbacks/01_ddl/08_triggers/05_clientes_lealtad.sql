@@ -1,0 +1,9 @@
+DROP TRIGGER IF EXISTS trg_customer_benefit_upd ON customer_benefit;
+DROP TRIGGER IF EXISTS trg_miles_transaction_upd ON miles_transaction;
+DROP TRIGGER IF EXISTS trg_loyalty_account_tier_upd ON loyalty_account_tier;
+DROP TRIGGER IF EXISTS trg_loyalty_account_upd ON loyalty_account;
+DROP TRIGGER IF EXISTS trg_customer_upd ON customer;
+DROP TRIGGER IF EXISTS trg_loyalty_tier_upd ON loyalty_tier;
+DROP TRIGGER IF EXISTS trg_loyalty_program_upd ON loyalty_program;
+DROP TRIGGER IF EXISTS trg_benefit_type_upd ON benefit_type;
+DROP TRIGGER IF EXISTS trg_customer_category_upd ON customer_category;

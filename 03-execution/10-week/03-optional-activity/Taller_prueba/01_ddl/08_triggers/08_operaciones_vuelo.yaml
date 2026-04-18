@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: "operaciones-vuelo-triggers-1"
+      author: "HU-09dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_flight_status_upd BEFORE UPDATE ON flight_status FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_delay_reason_type_upd BEFORE UPDATE ON delay_reason_type FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_flight_upd BEFORE UPDATE ON flight FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_flight_segment_upd BEFORE UPDATE ON flight_segment FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_flight_delay_upd BEFORE UPDATE ON flight_delay FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_flight_delay_upd ON flight_delay;
+              DROP TRIGGER IF EXISTS trg_flight_segment_upd ON flight_segment;
+              DROP TRIGGER IF EXISTS trg_flight_upd ON flight;
+              DROP TRIGGER IF EXISTS trg_delay_reason_type_upd ON delay_reason_type;
+              DROP TRIGGER IF EXISTS trg_flight_status_upd ON flight_status;

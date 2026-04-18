@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: "abordaje-indexes-1"
+      author: "HU-11dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE INDEX idx_check_in_status_id           ON check_in(check_in_status_id);
+              CREATE INDEX idx_boarding_pass_check_in_id    ON boarding_pass(check_in_id);
+              CREATE INDEX idx_boarding_validation_boarding_pass_id ON boarding_validation(boarding_pass_id);
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP INDEX IF EXISTS idx_boarding_validation_boarding_pass_id;
+              DROP INDEX IF EXISTS idx_boarding_pass_check_in_id;
+              DROP INDEX IF EXISTS idx_check_in_status_id;

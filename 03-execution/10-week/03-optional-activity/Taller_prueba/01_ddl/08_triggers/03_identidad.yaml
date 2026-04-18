@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: "identidad-triggers-1"
+      author: "HU-04dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_person_type_upd BEFORE UPDATE ON person_type FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_document_type_upd BEFORE UPDATE ON document_type FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_contact_type_upd BEFORE UPDATE ON contact_type FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_gender_upd BEFORE UPDATE ON gender FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_person_upd BEFORE UPDATE ON person FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_person_document_upd BEFORE UPDATE ON person_document FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_person_contact_upd BEFORE UPDATE ON person_contact FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_person_contact_upd ON person_contact;
+              DROP TRIGGER IF EXISTS trg_person_document_upd ON person_document;
+              DROP TRIGGER IF EXISTS trg_person_upd ON person;
+              DROP TRIGGER IF EXISTS trg_gender_upd ON gender;
+              DROP TRIGGER IF EXISTS trg_contact_type_upd ON contact_type;
+              DROP TRIGGER IF EXISTS trg_document_type_upd ON document_type;
+              DROP TRIGGER IF EXISTS trg_person_type_upd ON person_type;

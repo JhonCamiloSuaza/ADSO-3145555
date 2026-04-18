@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: "tripulacion-triggers-1"
+      author: "HU-14dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_crew_role_upd BEFORE UPDATE ON crew_role FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_crew_member_upd BEFORE UPDATE ON crew_member FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_flight_crew_assignment_upd BEFORE UPDATE ON flight_crew_assignment FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_flight_crew_assignment_upd ON flight_crew_assignment;
+              DROP TRIGGER IF EXISTS trg_crew_member_upd ON crew_member;
+              DROP TRIGGER IF EXISTS trg_crew_role_upd ON crew_role;

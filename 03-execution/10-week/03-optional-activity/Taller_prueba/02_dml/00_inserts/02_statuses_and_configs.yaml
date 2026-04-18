@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: "master-status-config-1"
+      author: "HU-16dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- Flight Status
+              INSERT INTO flight_status (status_code, status_name) VALUES ('SCHEDULED', 'Scheduled'), ('BOARDING', 'Boarding'), ('DEPARTED', 'Departed'), ('ARRIVED', 'Arrived'), ('CANCELLED', 'Cancelled');
+              
+              -- Payment Status
+              INSERT INTO payment_status (status_code, status_name) VALUES ('PENDING', 'Pending'), ('AUTHORIZED', 'Authorized'), ('COMPLETED', 'Completed'), ('FAILED', 'Failed'), ('REFUNDED', 'Refunded');
+              
+              -- Reservation Status
+              INSERT INTO reservation_status (status_code, status_name) VALUES ('PENDING', 'Pending'), ('CONFIRMED', 'Confirmed'), ('CANCELLED', 'Cancelled');
+              
+              -- Check-in Status
+              INSERT INTO check_in_status (status_code, status_name) VALUES ('PENDING', 'Pending'), ('COMPLETED', 'Completed');
+              
+              -- Ticket Status
+              INSERT INTO ticket_status (status_code, status_name) VALUES ('ISSUED', 'Issued'), ('USED', 'Used'), ('VOID', 'Voided'), ('REFUNDED', 'Refunded');
+              
+              -- Assignment Source
+              INSERT INTO assignment_source (source_code, source_name) VALUES ('AUTO', 'Auto Assigned'), ('MANUAL', 'Agent Override'), ('CUSTOMER', 'Customer Selected');
+              
+              -- Validation Result
+              INSERT INTO validation_result (result_code, result_name) VALUES ('APPROVED', 'Approved'), ('REJECTED', 'Rejected'), ('MANUAL_REVIEW', 'Manual Review');
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/02_statuses_and_configs.sql"
+            relativeToChangelogFile: true

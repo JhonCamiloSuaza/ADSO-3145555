@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: "aeronave-triggers-1"
+      author: "HU-08dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_aircraft_manufacturer_upd BEFORE UPDATE ON aircraft_manufacturer FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_aircraft_model_upd BEFORE UPDATE ON aircraft_model FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_cabin_class_upd BEFORE UPDATE ON cabin_class FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_aircraft_upd BEFORE UPDATE ON aircraft FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_aircraft_cabin_upd BEFORE UPDATE ON aircraft_cabin FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_aircraft_seat_upd BEFORE UPDATE ON aircraft_seat FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_maintenance_provider_upd BEFORE UPDATE ON maintenance_provider FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_maintenance_type_upd BEFORE UPDATE ON maintenance_type FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_maintenance_status_upd BEFORE UPDATE ON maintenance_status FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_maintenance_event_upd BEFORE UPDATE ON maintenance_event FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_maintenance_event_upd ON maintenance_event;
+              DROP TRIGGER IF EXISTS trg_maintenance_status_upd ON maintenance_status;
+              DROP TRIGGER IF EXISTS trg_maintenance_type_upd ON maintenance_type;
+              DROP TRIGGER IF EXISTS trg_maintenance_provider_upd ON maintenance_provider;
+              DROP TRIGGER IF EXISTS trg_aircraft_seat_upd ON aircraft_seat;
+              DROP TRIGGER IF EXISTS trg_aircraft_cabin_upd ON aircraft_cabin;
+              DROP TRIGGER IF EXISTS trg_aircraft_upd ON aircraft;
+              DROP TRIGGER IF EXISTS trg_cabin_class_upd ON cabin_class;
+              DROP TRIGGER IF EXISTS trg_aircraft_model_upd ON aircraft_model;
+              DROP TRIGGER IF EXISTS trg_aircraft_manufacturer_upd ON aircraft_manufacturer;

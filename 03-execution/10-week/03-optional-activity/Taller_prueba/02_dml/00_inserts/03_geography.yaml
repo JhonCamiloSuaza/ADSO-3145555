@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: "geography-data-1"
+      author: "HU-17dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- Continents
+              INSERT INTO continent (continent_code, continent_name) VALUES 
+              ('SA', 'South America'), 
+              ('NA', 'North America'), 
+              ('EU', 'Europe'), 
+              ('AS', 'Asia'), 
+              ('AF', 'Africa'), 
+              ('OC', 'Oceania'), 
+              ('AN', 'Antarctica');
+
+              -- Countries
+              INSERT INTO country (continent_id, iso_alpha2, iso_alpha3, country_name) VALUES 
+              ((SELECT continent_id FROM continent WHERE continent_code = 'SA'), 'CO', 'COL', 'Colombia'),
+              ((SELECT continent_id FROM continent WHERE continent_code = 'NA'), 'US', 'USA', 'United States'),
+              ((SELECT continent_id FROM continent WHERE continent_code = 'EU'), 'ES', 'ESP', 'Spain'),
+              ((SELECT continent_id FROM continent WHERE continent_code = 'SA'), 'BR', 'BRA', 'Brazil'),
+              ((SELECT continent_id FROM continent WHERE continent_code = 'EU'), 'FR', 'FRA', 'France'),
+              ((SELECT continent_id FROM continent WHERE continent_code = 'EU'), 'GB', 'GBR', 'United Kingdom'),
+              ((SELECT continent_id FROM continent WHERE continent_code = 'NA'), 'MX', 'MEX', 'Mexico'),
+              ((SELECT continent_id FROM continent WHERE continent_code = 'SA'), 'AR', 'ARG', 'Argentina'),
+              ((SELECT continent_id FROM continent WHERE continent_code = 'SA'), 'CL', 'CHL', 'Chile'),
+              ((SELECT continent_id FROM continent WHERE continent_code = 'SA'), 'PE', 'PER', 'Peru');
+
+              -- Currencies
+              INSERT INTO currency (iso_currency_code, currency_name, currency_symbol) VALUES 
+              ('COP', 'Colombian Peso', '$'),
+              ('USD', 'US Dollar', '$'),
+              ('EUR', 'Euro', '€'),
+              ('GBP', 'British Pound', '£'),
+              ('MXN', 'Mexican Peso', '$');
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/03_geography.sql"
+            relativeToChangelogFile: true

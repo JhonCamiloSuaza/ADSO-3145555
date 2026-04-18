@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: "abordaje-triggers-1"
+      author: "HU-11dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TRIGGER trg_boarding_group_upd BEFORE UPDATE ON boarding_group FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_check_in_status_upd BEFORE UPDATE ON check_in_status FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_check_in_upd BEFORE UPDATE ON check_in FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_boarding_pass_upd BEFORE UPDATE ON boarding_pass FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_validation_result_upd BEFORE UPDATE ON validation_result FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+              CREATE TRIGGER trg_boarding_validation_upd BEFORE UPDATE ON boarding_validation FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TRIGGER IF EXISTS trg_boarding_validation_upd ON boarding_validation;
+              DROP TRIGGER IF EXISTS trg_validation_result_upd ON validation_result;
+              DROP TRIGGER IF EXISTS trg_boarding_pass_upd ON boarding_pass;
+              DROP TRIGGER IF EXISTS trg_check_in_upd ON check_in;
+              DROP TRIGGER IF EXISTS trg_check_in_status_upd ON check_in_status;
+              DROP TRIGGER IF EXISTS trg_boarding_group_upd ON boarding_group;

@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-liquibase
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: camilo200804
+      POSTGRES_DB: Taller_prueba
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  liquibase:
+    image: liquibase/liquibase
+    container_name: taller_prueba-liquibase-container
+    depends_on:
+      - postgres
+    volumes:
+      - ./:/liquibase/changelog
+      - ./postgresql-42.7.9.jar:/liquibase/lib/postgresql.jar
+    working_dir: /liquibase/changelog
+    command: >
+      --url=jdbc:postgresql://postgres:5432/Taller_prueba
+      --username=postgres
+      --password=camilo200804
+      --driver=org.postgresql.Driver
+      --changeLogFile=changelog-master.yaml
+      update
+
+volumes:
+  postgres_data:

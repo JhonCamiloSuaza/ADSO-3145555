@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: "tripulacion-1"
+      author: "HU-14dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE TABLE crew_role (
+                  crew_role_id  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+                  role_code     varchar(20) NOT NULL,
+                  role_name     varchar(80) NOT NULL,
+                  created_at    timestamptz NOT NULL DEFAULT now(),
+                  updated_at    timestamptz NOT NULL DEFAULT now(),
+                  CONSTRAINT uq_crew_role_code UNIQUE (role_code),
+                  CONSTRAINT uq_crew_role_name UNIQUE (role_name)
+              );
+
+              CREATE TABLE crew_member (
+                  crew_member_id      uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+                  person_id           uuid        NOT NULL REFERENCES person(person_id),
+                  employee_id         varchar(20) NOT NULL,
+                  license_number      varchar(50),
+                  is_active           boolean     NOT NULL DEFAULT true,
+                  created_at          timestamptz NOT NULL DEFAULT now(),
+                  updated_at          timestamptz NOT NULL DEFAULT now(),
+                  CONSTRAINT uq_crew_member_person      UNIQUE (person_id),
+                  CONSTRAINT uq_crew_member_employee_id UNIQUE (employee_id)
+              );
+
+              CREATE TABLE flight_crew_assignment (
+                  assignment_id   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+                  flight_id       uuid        NOT NULL REFERENCES flight(flight_id),
+                  crew_member_id  uuid        NOT NULL REFERENCES crew_member(crew_member_id),
+                  crew_role_id    uuid        NOT NULL REFERENCES crew_role(crew_role_id),
+                  assigned_at     timestamptz NOT NULL DEFAULT now(),
+                  created_at      timestamptz NOT NULL DEFAULT now(),
+                  updated_at      timestamptz NOT NULL DEFAULT now(),
+                  CONSTRAINT uq_flight_crew_member UNIQUE (flight_id, crew_member_id)
+              );
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TABLE IF EXISTS flight_crew_assignment CASCADE;
+              DROP TABLE IF EXISTS crew_member CASCADE;
+              DROP TABLE IF EXISTS crew_role CASCADE;
