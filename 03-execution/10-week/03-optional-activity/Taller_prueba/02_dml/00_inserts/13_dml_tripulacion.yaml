@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: "13-dml-tripulacion"
+      author: "HU-21dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/13_dml_tripulacion.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- DOMINIO 13: TRIPULACION (DML)
+
+              -- 1. Crew Roles
+              INSERT INTO crew_role (crew_role_id, role_code, role_name) VALUES 
+              ('01eebc99-9c0b-4ef8-bb6d-6bb9bd380013', 'CAPTAIN', 'Captain / Pilot in Command'), 
+              ('01eebc99-9c0b-4ef8-bb6d-6bb9bd380014', 'FIRST_OFFICER', 'First Officer / Co-Pilot'), 
+              ('01eebc99-9c0b-4ef8-bb6d-6bb9bd380015', 'PURSER', 'Cabin Purser'), 
+              ('01eebc99-9c0b-4ef8-bb6d-6bb9bd380016', 'ATTENDANT', 'Flight Attendant');
+
+              -- 2. Crew Member (James Cook as Captain)
+              INSERT INTO crew_member (crew_member_id, person_id, crew_role_id, employee_id, joining_date) VALUES 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c13', 'd1eebc99-9c0b-4ef8-bb6d-6bb9bd380d21', '01eebc99-9c0b-4ef8-bb6d-6bb9bd380013', 'EMP-777', '2015-05-15');
+
+              -- 3. Flight Crew Assignment
+              INSERT INTO flight_crew_assignment (flight_crew_assignment_id, flight_id, crew_member_id, assigned_role_id) VALUES 
+              ('f1eebc99-9c0b-4ef8-bb6d-6bb9bd380f13', 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b81', 'c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c13', '01eebc99-9c0b-4ef8-bb6d-6bb9bd380013');

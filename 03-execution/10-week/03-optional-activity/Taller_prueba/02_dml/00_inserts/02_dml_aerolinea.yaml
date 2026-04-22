@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: "02-dml-aerolinea"
+      author: "HU-21dev"
+      changes:
+          - sql:
+              splitStatements: true
+              sql: |
+                -- DOMINIO 02: AEROLINEA (DML)
+                
+                -- 1. Avianca (Colombia)
+                INSERT INTO airline (home_country_id, airline_code, airline_name, iata_code, icao_code, is_active) VALUES 
+                ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c11', 'AVA', 'Avianca', 'AV', 'AVA', true);
+
+                -- 2. American Airlines (USA)
+                INSERT INTO airline (home_country_id, airline_code, airline_name, iata_code, icao_code, is_active) VALUES 
+                ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c12', 'AAL', 'American Airlines', 'AA', 'AAL', true);
+
+                -- 3. Iberia (Spain)
+                INSERT INTO airline (home_country_id, airline_code, airline_name, iata_code, icao_code, is_active) VALUES 
+                ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c13', 'IBE', 'Iberia', 'IB', 'IBE', true);
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/02_dml_aerolinea.sql"
+            relativeToChangelogFile: true

@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: "11-dml-pagos"
+      author: "HU-21dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/11_dml_pagos.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- Disable triggers during DML seed
+              SET session_replication_role = replica;
+
+              -- DOMINIO 11: PAGOS (DML)
+
+              -- 1. Payment Status
+              INSERT INTO payment_status (payment_status_id, status_code, status_name) VALUES 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd381311', 'AUTHORIZED', 'Authorized'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd381312', 'CAPTURED', 'Captured'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd381313', 'FAILED', 'Payment Failed'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd381314', 'REFUNDED', 'Refunded');
+
+              -- 2. Payment Methods
+              INSERT INTO payment_method (payment_method_id, method_code, method_name) VALUES 
+              ('11eebc99-9c0b-4ef8-bb6d-6bb9bd380111', 'CREDIT_CARD', 'Credit Card'), 
+              ('11eebc99-9c0b-4ef8-bb6d-6bb9bd380112', 'DEBIT_CARD', 'Debit Card'), 
+              ('11eebc99-9c0b-4ef8-bb6d-6bb9bd380113', 'PAYPAL', 'PayPal Account'), 
+              ('11eebc99-9c0b-4ef8-bb6d-6bb9bd380114', 'BANK_TRANS', 'Bank Transfer');
+
+              -- 3. Payment Transaction Types
+              INSERT INTO payment_transaction_type (payment_transaction_type_id, type_code, type_name) VALUES 
+              ('21eebc99-9c0b-4ef8-bb6d-6bb9bd380211', 'AUTH', 'Authorization'), 
+              ('21eebc99-9c0b-4ef8-bb6d-6bb9bd380212', 'CAPTURE', 'Capture'), 
+              ('21eebc99-9c0b-4ef8-bb6d-6bb9bd380213', 'REFUND', 'Refund'), 
+              ('21eebc99-9c0b-4ef8-bb6d-6bb9bd380214', 'VOID', 'Void');
+
+              -- 4. Sample Payment
+              INSERT INTO payment (payment_id, sale_id, payment_status_id, payment_method_id, currency_id, payment_reference, amount, authorized_at) VALUES 
+              ('61eebc99-9c0b-4ef8-bb6d-6bb9bd380611', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a91', '31eebc99-9c0b-4ef8-bb6d-6bb9bd381312', '11eebc99-9c0b-4ef8-bb6d-6bb9bd380111', 'aa00bc99-9c0b-4ef8-bb6d-6bb9bd380001', 'PAY-REF-1001', 350.00, '2026-04-20 14:05:00+00');
+
+              -- 5. Payment Transaction
+              INSERT INTO payment_transaction (payment_transaction_id, payment_id, payment_transaction_type_id, transaction_reference, transaction_amount, processed_at, provider_message) VALUES 
+              ('71eebc99-9c0b-4ef8-bb6d-6bb9bd380711', '61eebc99-9c0b-4ef8-bb6d-6bb9bd380611', '21eebc99-9c0b-4ef8-bb6d-6bb9bd380212', 'TXN-ABC-789', 350.00, '2026-04-20 14:05:30+00', 'Success: Transaction approved by bank');
+
+              -- Re-enable triggers
+              SET session_replication_role = DEFAULT;

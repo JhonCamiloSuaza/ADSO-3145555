@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: "operaciones-vuelo-1"
+      author: "HU-09dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/08_dml_operaciones_vuelo.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- DOMINIO 08: OPERACIONES VUELO (DML)
+
+              -- 1. Flight Status
+              INSERT INTO flight_status (flight_status_id, status_code, status_name) VALUES 
+              ('01eebc99-9c0b-4ef8-bb6d-6bb9bd380081', 'ON_TIME', 'On Time'), 
+              ('01eebc99-9c0b-4ef8-bb6d-6bb9bd380082', 'DELAYED', 'Delayed'), 
+              ('01eebc99-9c0b-4ef8-bb6d-6bb9bd380083', 'CANCELLED', 'Cancelled'), 
+              ('01eebc99-9c0b-4ef8-bb6d-6bb9bd380084', 'LANDED', 'Landed');
+
+              -- 2. Delay Reason Types
+              INSERT INTO delay_reason_type (delay_reason_type_id, reason_code, reason_name) VALUES 
+              ('11eebc99-9c0b-4ef8-bb6d-6bb9bd380181', 'WEATHER', 'Severe weather conditions'), 
+              ('11eebc99-9c0b-4ef8-bb6d-6bb9bd380182', 'TECH', 'Technical / Maintenance issue'), 
+              ('11eebc99-9c0b-4ef8-bb6d-6bb9bd380183', 'CREW', 'Crew availability / rotation');
+
+              -- 3. Flight (AV011 Avianca, using aircraft N743AV)
+              INSERT INTO flight (flight_id, airline_id, aircraft_id, flight_status_id, flight_number, service_date) VALUES 
+              ('f1eebc99-9c0b-4ef8-bb6d-6bb9bd380f81', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c21', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a71', '01eebc99-9c0b-4ef8-bb6d-6bb9bd380081', 'AV011', '2026-05-01');
+
+              -- 4. Flight Segment (BOG to MIA)
+              INSERT INTO flight_segment (flight_segment_id, flight_id, origin_airport_id, destination_airport_id, segment_number, scheduled_departure_at, scheduled_arrival_at) VALUES 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b81', 'f1eebc99-9c0b-4ef8-bb6d-6bb9bd380f81', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a61', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a62', 1, '2026-05-01 07:00:00+00', '2026-05-01 11:30:00+00');

@@ -2,8 +2,6 @@ databaseChangeLog:
   - include:
       file: 00_inserts/0000changelog.yaml
       relativeToChangelogFile: true
-      contextFilter: 02_dml
-      labels: 00_inserts
   - include:
       file: 01_updates/0000changelog.yaml
       relativeToChangelogFile: true

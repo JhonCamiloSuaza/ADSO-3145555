@@ -20,7 +20,7 @@ services:
       POSTGRES_PASSWORD: *****
       POSTGRES_DB: Taller_Prueba
     ports:
-      - "5435:5432"
+      - "5436:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -38,7 +38,7 @@ services:
       --username=postgres
       --password=camilo200804
       --driver=org.postgresql.Driver
-      --changeLogFile=01_tables/00-changelog.yaml
+      --changeLogFile=changelog-master.yaml
       update
 
 volumes:
@@ -55,7 +55,7 @@ Configuración del contenedor de base de datos.
 * **Contenedor:** `postgres-liquibase`
 * **Base de datos:** `Taller_Prueba`
 * **Usuario:** `postgres`
-* **Puerto externo:** `5435`
+* **Puerto externo:** `5436`
 * **Puerto interno:** `5432`
 
 ### 🔹 Variables de entorno
@@ -133,7 +133,7 @@ docker logs liquibase-container
 ## ⚠️ Consideraciones importantes
 
 * Liquibase usa el nombre del servicio `postgres` como host.
-* El puerto `5435` solo aplica para conexiones desde el host (tu PC).
+* El puerto `5436` solo aplica para conexiones desde el host (tu PC).
 * Asegúrate de que el archivo `00-changelog.yaml` exista en la ruta indicada.
 * El driver JDBC debe estar disponible en la ruta especificada.
 

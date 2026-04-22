@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: "14-dml-auditoria"
+      author: "HU-21dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/14_dml_auditoria.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- DOMINIO 14: AUDITORÍA (DML)
+
+              -- Sample Audit Log entry
+              INSERT INTO audit_log (table_name, record_id, action, new_data, changed_at) VALUES 
+              ('person', 'd1eebc99-9c0b-4ef8-bb6d-6bb9bd380d21', 'INSERT', '{"first_name": "Jhon Camilo", "last_name": "Suaza"}', now());

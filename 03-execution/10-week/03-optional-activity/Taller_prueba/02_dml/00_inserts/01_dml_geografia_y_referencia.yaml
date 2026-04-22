@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: "01-dml-geografia-y-referencia"
+      author: "HU-21dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/01_dml_geografia_y_referencia.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- DOMINIO 01: GEOGRAFIA Y REFERENCIA (DML)
+              
+              -- 1. Time Zones
+              INSERT INTO time_zone (time_zone_id, time_zone_name, utc_offset_minutes) VALUES 
+              ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'UTC-05:00', -300),
+              ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'UTC+01:00', 60),
+              ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'UTC-04:00', -240);
+
+              -- 2. Continents
+              INSERT INTO continent (continent_id, continent_code, continent_name) VALUES 
+              ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11', 'SA', 'South America'),
+              ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b12', 'NA', 'North America'),
+              ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b13', 'EU', 'Europe');
+
+              -- 3. Countries
+              INSERT INTO country (country_id, continent_id, iso_alpha2, iso_alpha3, country_name) VALUES 
+              ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c11', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11', 'CO', 'COL', 'Colombia'),
+              ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b12', 'US', 'USA', 'United States'),
+              ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c13', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b13', 'ES', 'ESP', 'Spain');
+
+              -- 4. State / Provinces
+              INSERT INTO state_province (state_province_id, country_id, state_code, state_name) VALUES 
+              ('d0eebc99-9c0b-4ef8-bb6d-6bb9bd380d11', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c11', 'DC', 'Bogota D.C.'),
+              ('d0eebc99-9c0b-4ef8-bb6d-6bb9bd380d12', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c12', 'FL', 'Florida'),
+              ('d0eebc99-9c0b-4ef8-bb6d-6bb9bd380d13', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c13', 'MD', 'Madrid');
+
+              -- 5. Cities
+              INSERT INTO city (city_id, state_province_id, time_zone_id, city_name) VALUES 
+              ('e0eebc99-9c0b-4ef8-bb6d-6bb9bd380e11', 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380d11', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Bogota'),
+              ('e0eebc99-9c0b-4ef8-bb6d-6bb9bd380e12', 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380d12', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'Miami'),
+              ('e0eebc99-9c0b-4ef8-bb6d-6bb9bd380e13', 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380d13', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Madrid');
+
+              -- 6. Currency
+              INSERT INTO currency (iso_currency_code, currency_name, currency_symbol, minor_units) VALUES 
+              ('USD', 'US Dollar', '$', 2), ('EUR', 'Euro', '€', 2), ('COP', 'Colombian Peso', '$', 0);
+
+              -- 7. Districts
+              INSERT INTO district (district_id, city_id, district_name) VALUES 
+              ('f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f21', 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380e11', 'Chapinero'),
+              ('f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f22', 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380e12', 'Downtown'),
+              ('f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f23', 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380e13', 'Centro');
+
+              -- 8. Addresses
+              INSERT INTO address (address_id, district_id, address_line_1, postal_code) VALUES 
+              ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a31', 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f21', 'Calle 60 # 10-20', '110231'),
+              ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a32', 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f22', '100 Biscayne Blvd', '33132'),
+              ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f23', 'Calle Mayor 1', '28013');

@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: "04-dml-seguridad"
+      author: "HU-21dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/04_dml_seguridad.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- DOMINIO 04: SEGURIDAD (DML)
+
+              -- 1. User Status
+              INSERT INTO user_status (user_status_id, status_code, status_name) VALUES 
+              ('s1eebc99-9c0b-4ef8-bb6d-6bb9bd380s41', 'ACTIVE', 'Active Account'), 
+              ('s1eebc99-9c0b-4ef8-bb6d-6bb9bd380s42', 'INACTIVE', 'Inactive Account'), 
+              ('s1eebc99-9c0b-4ef8-bb6d-6bb9bd380s43', 'LOCKED', 'Locked by Security');
+
+              -- 2. Security Roles
+              INSERT INTO security_role (security_role_id, role_code, role_name, role_description) VALUES 
+              ('r1eebc99-9c0b-4ef8-bb6d-6bb9bd380r41', 'ADMIN', 'System Administrator', 'Total access to all system modules'),
+              ('r1eebc99-9c0b-4ef8-bb6d-6bb9bd380r42', 'MANAGER', 'Operations Manager', 'Full flight and crew management access'),
+              ('r1eebc99-9c0b-4ef8-bb6d-6bb9bd380r43', 'SALES', 'Sales Agent', 'Access to reservations, sales and customer data'),
+              ('r1eebc99-9c0b-4ef8-bb6d-6bb9bd380r44', 'PASSENGER', 'End Customer', 'Limited access to personal reservations and profile');
+
+              -- 3. Security Permissions
+              INSERT INTO security_permission (security_permission_id, permission_code, permission_name, permission_description) VALUES 
+              ('p1eebc99-9c0b-4ef8-bb6d-6bb9bd380p41', 'AUDIT_VIEW', 'View Audit Logs', 'Ability to see technical audit logs'),
+              ('p1eebc99-9c0b-4ef8-bb6d-6bb9bd380p42', 'FLIGHT_MANAGE', 'Manage Flights', 'Create, update and cancel flights'),
+              ('p1eebc99-9c0b-4ef8-bb6d-6bb9bd380p43', 'SALE_ISSUE', 'Issue Sales', 'Record payments and confirm reservations'),
+              ('p1eebc99-9c0b-4ef8-bb6d-6bb9bd380p44', 'USER_MANAGE', 'Manage Users', 'Create and modify system accounts'),
+              ('p1eebc99-9c0b-4ef8-bb6d-6bb9bd380p45', 'RESERVATION_VIEW', 'View Reservations', 'Query existing flight reservations');
+
+              -- 4. Role Permissions Mapping
+              -- Admin gets everything
+              INSERT INTO role_permission (security_role_id, security_permission_id)
+              SELECT 'r1eebc99-9c0b-4ef8-bb6d-6bb9bd380r41', security_permission_id FROM security_permission;
+
+              -- 5. Sample User Account (for Jhon Camilo Suaza)
+              INSERT INTO user_account (user_account_id, person_id, user_status_id, username, password_hash) VALUES 
+              ('u1eebc99-9c0b-4ef8-bb6d-6bb9bd380u41', 'd1eebc99-9c0b-4ef8-bb6d-6bb9bd380d21', 's1eebc99-9c0b-4ef8-bb6d-6bb9bd380s41', 'jcsuaza', 'scrypt:32768:8:1$uH8jK9...$8a2b...');
+
+              -- 6. User Role Assignment
+              INSERT INTO user_role (user_account_id, security_role_id) VALUES 
+              ('u1eebc99-9c0b-4ef8-bb6d-6bb9bd380u41', 'r1eebc99-9c0b-4ef8-bb6d-6bb9bd380r41');

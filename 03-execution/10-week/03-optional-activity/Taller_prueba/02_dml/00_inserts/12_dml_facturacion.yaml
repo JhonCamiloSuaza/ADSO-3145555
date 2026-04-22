@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: "12-dml-facturacion"
+      author: "HU-21dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/12_dml_facturacion.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- Disable triggers during DML seed
+              SET session_replication_role = replica;
+
+              -- DOMINIO 12: FACTURACION (DML)
+
+              -- 1. Taxes
+              INSERT INTO tax (tax_id, tax_code, tax_name, rate_percentage, effective_from) VALUES 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'IVA_COL', 'Impuesto al Valor Agregado (Colombia)', 19.000, '2020-01-01'), 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd381a12', 'SALES_TAX_US', 'US Sales Tax', 7.000, '2020-01-01');
+
+              -- 2. Invoice Status
+              INSERT INTO invoice_status (invoice_status_id, status_code, status_name) VALUES 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd382312', 'DRAFT', 'Draft Invoice'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd382313', 'ISSUED', 'Issued'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd382314', 'PAID', 'Paid'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd382315', 'CANCELLED', 'Cancelled');
+
+              -- 3. Sample Invoice
+              INSERT INTO invoice (invoice_id, sale_id, invoice_status_id, currency_id, invoice_number, issued_at) VALUES 
+              ('41eebc99-9c0b-4ef8-bb6d-6bb9bd380412', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a91', '31eebc99-9c0b-4ef8-bb6d-6bb9bd382314', 'aa00bc99-9c0b-4ef8-bb6d-6bb9bd380001', 'INV-2026-0001', '2026-04-20 14:10:00+00');
+
+              -- 4. Invoice Line
+              INSERT INTO invoice_line (invoice_line_id, invoice_id, tax_id, line_number, line_description, quantity, unit_price) VALUES 
+              ('51eebc99-9c0b-4ef8-bb6d-6bb9bd380512', '41eebc99-9c0b-4ef8-bb6d-6bb9bd380412', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 1, 'Air Transportation Service BOG-MIA', 1, 350.00);
+
+              -- Re-enable triggers
+              SET session_replication_role = DEFAULT;

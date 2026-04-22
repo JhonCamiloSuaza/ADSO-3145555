@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: "06-dml-aeropuerto"
+      author: "HU-21dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- DOMINIO 06: AEROPUERTO (DML)
+
+              -- 1. Airports
+              INSERT INTO airport (airport_id, address_id, airport_name, iata_code, icao_code) VALUES 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a61', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a31', 'El Dorado International Airport', 'BOG', 'SKBO'),
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a62', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a32', 'Miami International Airport', 'MIA', 'KMIA'),
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a63', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', 'Adolfo Suárez Madrid–Barajas Airport', 'MAD', 'LEMD')
+              ON CONFLICT (iata_code) DO NOTHING;
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/06_dml_aeropuerto.sql"
+            relativeToChangelogFile: true

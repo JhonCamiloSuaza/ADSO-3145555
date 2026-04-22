@@ -1,0 +1,64 @@
+databaseChangeLog:
+  - changeSet:
+      id: "03-dml-identidad"
+      author: "HU-21dev"
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- DOMINIO 03: IDENTIDAD (DML)
+
+              -- 1. Identity Basics (Genders)
+              INSERT INTO gender (gender_id, gender_code, gender_name) VALUES 
+              ('f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f11', 'M', 'Male'), 
+              ('f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f12', 'F', 'Female'), 
+              ('f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f13', 'X', 'Non-Binary'), 
+              ('f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f14', 'U', 'Unknown');
+
+              -- 2. Person Types
+              INSERT INTO person_type (person_type_id, type_code, type_name) VALUES 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a21', 'PAX', 'Passenger'), 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'EMP', 'Employee'), 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a23', 'CREW', 'Crew Member');
+
+              -- 3. Document Types
+              INSERT INTO document_type (document_type_id, type_code, type_name) VALUES 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b21', 'PASSPORT', 'Passport'), 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b22', 'ID', 'National ID Card'), 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b23', 'VISA', 'Visa');
+
+              -- 4. Contact Types
+              INSERT INTO contact_type (contact_type_id, type_code, type_name) VALUES 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c21', 'EMAIL', 'Email Address'), 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c22', 'PHONE', 'Mobile Phone'), 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c23', 'HOME', 'Home Phone');
+
+              -- 5. Sample Persons
+              -- Jhon Camilo Suaza (Colombia, Male, PAX)
+              INSERT INTO person (person_id, person_type_id, nationality_country_id, gender_id, first_name, last_name, birth_date) VALUES 
+              ('d1eebc99-9c0b-4ef8-bb6d-6bb9bd380d21', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a21', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c11', 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f11', 'Jhon Camilo', 'Suaza', '1995-05-15');
+
+              -- Jane Doe (USA, Female, PAX)
+              INSERT INTO person (person_id, person_type_id, nationality_country_id, gender_id, first_name, last_name, birth_date) VALUES 
+              ('d1eebc99-9c0b-4ef8-bb6d-6bb9bd380d22', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a21', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c12', 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f12', 'Jane', 'Doe', '1990-08-20');
+
+              -- James Cook (Spain, Male, CREW)
+              INSERT INTO person (person_id, person_type_id, nationality_country_id, gender_id, first_name, last_name, birth_date) VALUES 
+              ('d1eebc99-9c0b-4ef8-bb6d-6bb9bd380d23', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a23', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c13', 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f11', 'James', 'Cook', '1975-12-01');
+
+              -- Alice Smith (USA, Female, EMP)
+              INSERT INTO person (person_id, person_type_id, nationality_country_id, gender_id, first_name, last_name, birth_date) VALUES 
+              ('d1eebc99-9c0b-4ef8-bb6d-6bb9bd380d24', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c12', 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380f12', 'Alice', 'Smith', '1988-03-15');
+
+              -- 6. Sample Documents
+              INSERT INTO person_document (person_id, document_type_id, issuing_country_id, document_number) VALUES 
+              ('d1eebc99-9c0b-4ef8-bb6d-6bb9bd380d21', 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b21', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c11', 'PAS123456');
+
+              -- 7. Sample Contacts
+              INSERT INTO person_contact (person_id, contact_type_id, contact_value, is_primary) VALUES 
+              ('d1eebc99-9c0b-4ef8-bb6d-6bb9bd380d21', 'c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c21', 'jhon.suaza@example.com', true);
+
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/03_dml_identidad.sql"
+            relativeToChangelogFile: true

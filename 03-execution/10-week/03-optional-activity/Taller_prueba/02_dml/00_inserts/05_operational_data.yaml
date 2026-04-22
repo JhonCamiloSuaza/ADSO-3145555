@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: "operational-data-1"
+      author: "HU-19dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/05_dml_clientes_lealtad.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- DOMINIO 05: CLIENTES Y LEALTAD (DML)
+
+              -- 1. Customer Categories
+              INSERT INTO customer_category (customer_category_id, category_code, category_name) VALUES 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c51', 'STANDARD', 'Standard Customer'), 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c52', 'VIP', 'VIP Customer'), 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c53', 'CORPORATE', 'Corporate Customer');
+
+              -- 2. Benefit Types
+              INSERT INTO benefit_type (benefit_type_id, benefit_code, benefit_name, benefit_description) VALUES 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b51', 'EXTRA_BAGGAGE', 'Extra Baggage Allowance', 'Additional 23kg bag allowed'),
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b52', 'LOUNGE_ACCESS', 'VIP Lounge Access', 'Entry to exclusive airport lounges'),
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b53', 'PRIORITY_BOARDING', 'Priority Boarding', 'Board the aircraft in group 1');
+
+              -- 3. Loyalty Programs
+              -- Avianca LifeMiles (COP)
+              INSERT INTO loyalty_program (loyalty_program_id, airline_id, default_currency_id, program_code, program_name, expiration_months) VALUES 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a51', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c21', 'aa00bc99-9c0b-4ef8-bb6d-6bb9bd380003', 'LIFEMILES', 'LifeMiles Avianca', 24);
+
+              -- American Airlines AAdvantage (USD)
+              INSERT INTO loyalty_program (loyalty_program_id, airline_id, default_currency_id, program_code, program_name, expiration_months) VALUES 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a52', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c22', 'aa00bc99-9c0b-4ef8-bb6d-6bb9bd380001', 'AADVANTAGE', 'AA Advantage', 18);
+
+              -- 4. Loyalty Tiers
+              INSERT INTO loyalty_tier (loyalty_tier_id, loyalty_program_id, tier_code, tier_name, priority_level, required_miles) VALUES 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b54', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a51', 'SILVER', 'Silver Elite', 3, 15000),
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b55', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a51', 'GOLD', 'Gold Elite', 2, 30000),
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b56', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a51', 'DIAMOND', 'Diamond Elite', 1, 60000);
+
+              INSERT INTO loyalty_tier (loyalty_tier_id, loyalty_program_id, tier_code, tier_name, priority_level, required_miles) VALUES 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b57', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a52', 'GOLD', 'AA Gold', 3, 20000),
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b58', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a52', 'PLATINUM', 'AA Platinum', 2, 50000);
+
+              -- 5. Sample Customers
+              INSERT INTO customer (customer_id, airline_id, person_id, customer_category_id) VALUES 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c54', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c21', 'd1eebc99-9c0b-4ef8-bb6d-6bb9bd380d21', 'c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c52');
+
+              INSERT INTO customer (customer_id, airline_id, person_id, customer_category_id) VALUES 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c55', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c22', 'd1eebc99-9c0b-4ef8-bb6d-6bb9bd380d22', 'c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c51');
+
+              -- 6. Loyalty Accounts
+              INSERT INTO loyalty_account (loyalty_account_id, customer_id, loyalty_program_id, account_number) VALUES 
+              ('d1eebc99-9c0b-4ef8-bb6d-6bb9bd380d51', 'c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c54', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a51', 'LM-123456789'),
+              ('d1eebc99-9c0b-4ef8-bb6d-6bb9bd380d52', 'c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c55', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a52', 'AA-987654321');

@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: "10-dml-abordaje"
+      author: "HU-21dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/10_dml_abordaje.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- Disable triggers during DML seed
+              SET session_replication_role = replica;
+
+              -- DOMINIO 10: ABORDAJE (DML)
+
+              -- 1. Boarding Groups
+              INSERT INTO boarding_group (boarding_group_id, group_code, group_name, sequence_no) VALUES 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a10', 'GRP1', 'Priority Group 1', 1), 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd381a10', 'GRP2', 'Economy Group 2', 2);
+
+              -- 2. Check-in Status
+              INSERT INTO check_in_status (check_in_status_id, status_code, status_name) VALUES 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd380310', 'PENDING', 'Pending Check-in'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd380311', 'COMPLETED', 'Checked-in Successfully'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd380312', 'CANCELLED', 'Check-in Cancelled');
+
+              -- 3. Validation Results
+              INSERT INTO validation_result (validation_result_id, result_code, result_name) VALUES 
+              ('81eebc99-9c0b-4ef8-bb6d-6bb9bd380810', 'SUCCESS', 'Validated - Allowed to board'), 
+              ('81eebc99-9c0b-4ef8-bb6d-6bb9bd380811', 'DENIED', 'Denied - Issue detected'), 
+              ('81eebc99-9c0b-4ef8-bb6d-6bb9bd380812', 'MANUAL', 'Manually Approved');
+
+              -- 4. Sample Check-in
+              INSERT INTO check_in (check_in_id, ticket_segment_id, check_in_status_id, boarding_group_id, checked_in_at) VALUES 
+              ('91eebc99-9c0b-4ef8-bb6d-6bb9bd380910', '81eebc99-9c0b-4ef8-bb6d-6bb9bd380891', '31eebc99-9c0b-4ef8-bb6d-6bb9bd380311', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a10', '2026-05-01 06:00:00+00');
+
+              -- 5. Boarding Pass
+              INSERT INTO boarding_pass (boarding_pass_id, check_in_id, boarding_pass_code, barcode_value, issued_at) VALUES 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b10', '91eebc99-9c0b-4ef8-bb6d-6bb9bd380910', 'BP-JCS77-BOGMIA', 'BC-1234567890-AV-JCS', '2026-05-01 06:01:00+00');
+
+              -- Re-enable triggers
+              SET session_replication_role = DEFAULT;

@@ -2,51 +2,24 @@ databaseChangeLog:
   - changeSet:
       id: "roles-permissions-data-1"
       author: "HU-18dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/04_dml_seguridad.sql"
+            relativeToChangelogFile: true
       changes:
         - sql:
             splitStatements: true
             sql: |
-              -- User Status
-              INSERT INTO user_status (status_code, status_name) VALUES 
-              ('ACTIVE', 'Active Account'), 
-              ('INACTIVE', 'Inactive Account'), 
-              ('LOCKED', 'Locked by Security');
+              -- DOMINIO 04: SEGURIDAD (DML)
 
-              -- Security Roles
-              INSERT INTO security_role (role_code, role_name, role_description) VALUES 
-              ('ADMIN', 'System Administrator', 'Total access to all system modules'),
-              ('MANAGER', 'Operations Manager', 'Full flight and crew management access'),
-              ('SALES', 'Sales Agent', 'Access to reservations, sales and customer data'),
-              ('PASSENGER', 'End Customer', 'Limited access to personal reservations and profile'),
-              ('MAINTENANCE', 'Maintenance Crew', 'Access to aircraft and technical logs');
+              -- 1. User Status
+              INSERT INTO user_status (user_status_id, status_code, status_name) VALUES 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a41', 'ACTIVE', 'Active Account'), 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a42', 'INACTIVE', 'Inactive Account'), 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a43', 'LOCKED', 'Locked by Security');
 
-              -- Security Permissions
-              INSERT INTO security_permission (permission_code, permission_name, permission_description) VALUES 
-              ('AUDIT_VIEW', 'View Audit Logs', 'Ability to see technical audit logs'),
-              ('FLIGHT_MANAGE', 'Manage Flights', 'Create, update and cancel flights'),
-              ('SALE_ISSUE', 'Issue Sales', 'Record payments and confirm reservations'),
-              ('USER_MANAGE', 'Manage Users', 'Create and modify system accounts'),
-              ('RESERVATION_VIEW', 'View Reservations', 'Query existing flight reservations');
-
-              -- Role Permissions Mapping (Sample)
-              -- Admin gets everything
-              INSERT INTO role_permission (security_role_id, security_permission_id)
-              SELECT r.security_role_id, p.security_permission_id 
-              FROM security_role r, security_permission p 
-              WHERE r.role_code = 'ADMIN';
-
-              -- Manager gets Flights and Reservations
-              INSERT INTO role_permission (security_role_id, security_permission_id)
-              SELECT r.security_role_id, p.security_permission_id 
-              FROM security_role r, security_permission p 
-              WHERE r.role_code = 'MANAGER' AND p.permission_code IN ('FLIGHT_MANAGE', 'RESERVATION_VIEW');
-
-              -- Sales gets Sales and Reservations
-              INSERT INTO role_permission (security_role_id, security_permission_id)
-              SELECT r.security_role_id, p.security_permission_id 
-              FROM security_role r, security_permission p 
-              WHERE r.role_code = 'SALES' AND p.permission_code IN ('SALE_ISSUE', 'RESERVATION_VIEW');
-      rollback:
-        - sqlFile:
-            path: "../../../05_rollbacks/02_dml/00_inserts/04_roles_and_permissions.sql"
-            relativeToChangelogFile: true
+              -- 2. Security Roles
+              INSERT INTO security_role (security_role_id, role_code, role_name) VALUES 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b41', 'ADMIN', 'System Administrator'), 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b42', 'AGENT', 'Booking Agent'), 
+              ('b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b43', 'CUSTOMER', 'End User / Traveler');

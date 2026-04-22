@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: "ventas-reservas-1"
+      author: "HU-10dev"
+      rollback:
+        - sqlFile:
+            path: "../../../05_rollbacks/02_dml/00_inserts/09_dml_ventas_reservas.sql"
+            relativeToChangelogFile: true
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- Disable triggers during DML seed to avoid audit trigger issues
+              SET session_replication_role = replica;
+
+              -- DOMINIO 09: VENTAS Y RESERVAS (DML)
+
+              -- 1. Reservation Status
+              INSERT INTO reservation_status (reservation_status_id, status_code, status_name) VALUES 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd380391', 'PENDING', 'Pending Payment'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd380392', 'CONFIRMED', 'Confirmed'), 
+              ('31eebc99-9c0b-4ef8-bb6d-6bb9bd380393', 'CANCELLED', 'Cancelled');
+
+              -- 2. Ticket Status
+              INSERT INTO ticket_status (ticket_status_id, status_code, status_name) VALUES 
+              ('21eebc99-9c0b-4ef8-bb6d-6bb9bd380291', 'ISSUED', 'Issued'), 
+              ('21eebc99-9c0b-4ef8-bb6d-6bb9bd380292', 'USED', 'Used'), 
+              ('21eebc99-9c0b-4ef8-bb6d-6bb9bd380293', 'VOIDED', 'Voided');
+
+              -- 3. Sale Channels
+              INSERT INTO sale_channel (sale_channel_id, channel_code, channel_name) VALUES 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c91', 'WEB', 'Official Website'), 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c92', 'APP', 'Mobile Application'), 
+              ('c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c93', 'OFFICE', 'Airport Office');
+
+              -- 4. Passenger Types
+              INSERT INTO passenger_type (passenger_type_id, type_code, type_name) VALUES 
+              ('61eebc99-9c0b-4ef8-bb6d-6bb9bd380691', 'ADULT', 'Adult (12+)'), 
+              ('61eebc99-9c0b-4ef8-bb6d-6bb9bd380692', 'CHILD', 'Child (2-11)'), 
+              ('61eebc99-9c0b-4ef8-bb6d-6bb9bd380693', 'INFANT', 'Infant (under 2)');
+
+              -- 5. Fare Class (Economy Flexible)
+              INSERT INTO fare_class (fare_class_id, cabin_class_id, fare_class_code, fare_class_name, is_refundable_by_default) VALUES 
+              ('e1eebc99-9c0b-4ef8-bb6d-6bb9bd380e91', 'c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c71', 'YFLEX', 'Economy Flexible', true);
+
+              -- 6. Fare (BOG to MIA on Avianca)
+              INSERT INTO fare (fare_id, airline_id, origin_airport_id, destination_airport_id, fare_class_id, currency_id, fare_code, base_amount, valid_from) VALUES 
+              ('f1eebc99-9c0b-4ef8-bb6d-6bb9bd380f91', 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380c21', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a61', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a62', 'e1eebc99-9c0b-4ef8-bb6d-6bb9bd380e91', 'aa00bc99-9c0b-4ef8-bb6d-6bb9bd380001', 'AV-BOG-MIA-YFLEX', 350.00, '2026-01-01');
+
+              -- 7. Reservation
+              INSERT INTO reservation (reservation_id, booked_by_customer_id, reservation_status_id, sale_channel_id, reservation_code, booked_at) VALUES 
+              ('01eebc99-9c0b-4ef8-bb6d-6bb9bd380091', 'c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c54', '31eebc99-9c0b-4ef8-bb6d-6bb9bd380392', 'c1eebc99-9c0b-4ef8-bb6d-6bb9bd380c91', 'PNR-JCS77', '2026-04-20 14:00:00+00');
+
+              -- 8. Reservation Passenger
+              INSERT INTO reservation_passenger (reservation_passenger_id, reservation_id, person_id, passenger_type_id, passenger_sequence_no) VALUES 
+              ('51eebc99-9c0b-4ef8-bb6d-6bb9bd380591', '01eebc99-9c0b-4ef8-bb6d-6bb9bd380091', 'd1eebc99-9c0b-4ef8-bb6d-6bb9bd380d21', '61eebc99-9c0b-4ef8-bb6d-6bb9bd380691', 1);
+
+              -- 9. Sale
+              INSERT INTO sale (sale_id, reservation_id, currency_id, sale_code, sold_at) VALUES 
+              ('a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a91', '01eebc99-9c0b-4ef8-bb6d-6bb9bd380091', 'aa00bc99-9c0b-4ef8-bb6d-6bb9bd380001', 'SALE-1001', '2026-04-20 14:05:00+00');
+
+              -- 10. Ticket
+              INSERT INTO ticket (ticket_id, sale_id, reservation_passenger_id, fare_id, ticket_status_id, ticket_number, issued_at) VALUES 
+              ('71eebc99-9c0b-4ef8-bb6d-6bb9bd380791', 'a1eebc99-9c0b-4ef8-bb6d-6bb9bd380a91', '51eebc99-9c0b-4ef8-bb6d-6bb9bd380591', 'f1eebc99-9c0b-4ef8-bb6d-6bb9bd380f91', '21eebc99-9c0b-4ef8-bb6d-6bb9bd380291', '134-2400000001', '2026-04-20 14:06:00+00');
+
+              -- 11. Ticket Segment
+              INSERT INTO ticket_segment (ticket_segment_id, ticket_id, flight_segment_id, segment_sequence_no) VALUES 
+              ('81eebc99-9c0b-4ef8-bb6d-6bb9bd380891', '71eebc99-9c0b-4ef8-bb6d-6bb9bd380791', 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b81', 1);
+
+              -- Re-enable triggers
+              SET session_replication_role = DEFAULT;
