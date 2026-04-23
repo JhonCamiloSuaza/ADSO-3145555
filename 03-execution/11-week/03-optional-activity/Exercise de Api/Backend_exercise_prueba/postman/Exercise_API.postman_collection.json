@@ -1,0 +1,500 @@
+{
+  "info": {
+    "name": "Exercise API - Préstamos de Libros",
+    "description": "Colección Postman para probar todos los endpoints CRUD de la API REST.\n\nEntidades:\n- Usuarios (entidad primaria)\n- Libros (entidad primaria)\n- Préstamos (entidad secundaria)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "usuario_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "libro_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "prestamo_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "👤 Usuarios",
+      "item": [
+        {
+          "name": "Crear Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('usuario_id', jsonData.id);",
+                  "pm.test('Status 201 Created', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Tiene ID UUID', function () {",
+                  "    pm.expect(jsonData.id).to.not.be.null;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Pérez\",\n  \"email\": \"juan.perez@test.com\",\n  \"telefono\": \"+57 300 111 2222\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Consultar Todos los Usuarios",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Retorna array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Consultar Usuario por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Tiene nombre', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.nombre).to.not.be.null;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/usuarios/{{usuario_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "{{usuario_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Modificar Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Nombre actualizado', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.nombre).to.eql('Juan Carlos');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Carlos\",\n  \"apellido\": \"Pérez Gómez\",\n  \"email\": \"juan.perez@test.com\",\n  \"telefono\": \"+57 300 999 8888\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios/{{usuario_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "{{usuario_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/usuarios/{{usuario_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "{{usuario_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📚 Libros",
+      "item": [
+        {
+          "name": "Crear Libro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('libro_id', jsonData.id);",
+                  "pm.test('Status 201 Created', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Tiene ID UUID', function () {",
+                  "    pm.expect(jsonData.id).to.not.be.null;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"La Vorágine\",\n  \"autor\": \"José Eustasio Rivera\",\n  \"isbn\": \"978-958-42-1234-5\",\n  \"genero\": \"Novela\",\n  \"fechaPublicacion\": \"1924-11-25\",\n  \"disponible\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libros",
+              "host": ["{{base_url}}"],
+              "path": ["libros"]
+            }
+          }
+        },
+        {
+          "name": "Consultar Todos los Libros",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Retorna array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/libros",
+              "host": ["{{base_url}}"],
+              "path": ["libros"]
+            }
+          }
+        },
+        {
+          "name": "Consultar Libro por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Tiene titulo', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.titulo).to.not.be.null;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/libros/{{libro_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libros", "{{libro_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Modificar Libro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Titulo actualizado', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.titulo).to.eql('La Vorágine - Edición Especial');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"La Vorágine - Edición Especial\",\n  \"autor\": \"José Eustasio Rivera\",\n  \"isbn\": \"978-958-42-1234-5\",\n  \"genero\": \"Novela Clásica\",\n  \"fechaPublicacion\": \"1924-11-25\",\n  \"disponible\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/libros/{{libro_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libros", "{{libro_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Libro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/libros/{{libro_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["libros", "{{libro_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔄 Préstamos",
+      "item": [
+        {
+          "name": "Crear Préstamo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('prestamo_id', jsonData.id);",
+                  "pm.test('Status 201 Created', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Tiene estado ACTIVO', function () {",
+                  "    pm.expect(jsonData.estado).to.eql('ACTIVO');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuario\": { \"id\": \"{{usuario_id}}\" },\n  \"libro\": { \"id\": \"{{libro_id}}\" },\n  \"estado\": \"ACTIVO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/prestamos",
+              "host": ["{{base_url}}"],
+              "path": ["prestamos"]
+            }
+          }
+        },
+        {
+          "name": "Consultar Todos los Préstamos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Retorna array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/prestamos",
+              "host": ["{{base_url}}"],
+              "path": ["prestamos"]
+            }
+          }
+        },
+        {
+          "name": "Consultar Préstamo por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Tiene usuario y libro', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.usuario).to.not.be.null;",
+                  "    pm.expect(jsonData.libro).to.not.be.null;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/prestamos/{{prestamo_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["prestamos", "{{prestamo_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Modificar Préstamo (Devolver libro)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Estado es DEVUELTO', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.estado).to.eql('DEVUELTO');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuario\": { \"id\": \"{{usuario_id}}\" },\n  \"libro\": { \"id\": \"{{libro_id}}\" },\n  \"fechaPrestamo\": \"2026-04-01T10:00:00\",\n  \"fechaDevolucion\": \"2026-04-22T10:00:00\",\n  \"estado\": \"DEVUELTO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/prestamos/{{prestamo_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["prestamos", "{{prestamo_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Préstamo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/prestamos/{{prestamo_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["prestamos", "{{prestamo_id}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+# ============================================================
+# GitHub Action: Build y Verificación del Backend
+# ============================================================
+# Se dispara en cada push/PR. Compila el proyecto con Maven
+# y verifica que no haya errores de compilación.
+# Si falla, NO deja hacer merge.
+# ============================================================
+
+name: "Backend - Build & Verify"
+
+on:
+  push:
+    branches: [ main, develop, '**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    name: "Compilar y Verificar Backend"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "📥 Checkout del repositorio"
+        uses: actions/checkout@v4
+
+      - name: "☕ Configurar Java 17"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: "📦 Descargar dependencias"
+        run: mvn dependency:go-offline -B
+
+      - name: "🔨 Compilar proyecto"
+        run: mvn clean compile -B
+
+      - name: "📋 Empaquetar JAR (sin tests)"
+        run: mvn package -DskipTests -B
+
+      - name: "✅ Verificar que el JAR se generó"
+        run: ls -la target/*.jar
+
+      - name: "🐳 Verificar Dockerfile build"
+        run: docker build -t exercise-api:test .
