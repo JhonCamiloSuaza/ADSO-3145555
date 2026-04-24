@@ -16,6 +16,7 @@ public class UsuarioMapper {
                 .telefono(entity.getTelefono())
                 .fechaRegistro(entity.getFechaRegistro())
                 .activo(entity.getActivo())
+                .genero(entity.getGenero())
                 .build();
     }
 
@@ -29,6 +30,7 @@ public class UsuarioMapper {
                 .telefono(dto.getTelefono())
                 .fechaRegistro(dto.getFechaRegistro())
                 .activo(dto.getActivo())
+                .genero(dto.getGenero())
                 .build();
     }
 }

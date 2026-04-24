@@ -57,6 +57,11 @@ public class Usuario {
     @Column(name = "fecha_registro", nullable = false, updatable = false)
     private LocalDateTime fechaRegistro;
 
+    /** Género del usuario (opcional) */
+    @Size(max = 20, message = "El género no puede exceder 20 caracteres")
+    @Column(name = "genero", length = 20)
+    private String genero;
+
     /** Estado activo/inactivo del usuario */
     @Column(name = "activo", nullable = false)
     private Boolean activo;

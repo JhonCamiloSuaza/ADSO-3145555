@@ -18,7 +18,7 @@ const Usuarios = {
     renderTable() {
         const tbody = document.getElementById('tbody-usuarios');
         if (!this.all.length) {
-            tbody.innerHTML = '<tr><td colspan="6" class="table__empty">No hay usuarios registrados</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="table__empty">No hay usuarios registrados</td></tr>';
             return;
         }
 
@@ -28,6 +28,7 @@ const Usuarios = {
                 <td>${u.apellido}</td>
                 <td>${u.email}</td>
                 <td>${u.telefono || '-'}</td>
+                <td>${u.genero || 'No Especificado'}</td>
                 <td>
                     <span class="badge ${u.activo ? 'badge--active' : 'badge--inactive'}">
                         ${u.activo ? 'Activo' : 'Inactivo'}
@@ -61,6 +62,7 @@ const Usuarios = {
             apellido: document.getElementById('usuario-apellido').value,
             email: document.getElementById('usuario-email').value,
             telefono: document.getElementById('usuario-telefono').value,
+            genero: document.getElementById('usuario-genero').value || null,
             activo: document.getElementById('usuario-activo').value === 'true'
         };
 
@@ -90,6 +92,7 @@ const Usuarios = {
         document.getElementById('usuario-apellido').value = u.apellido;
         document.getElementById('usuario-email').value = u.email;
         document.getElementById('usuario-telefono').value = u.telefono || '';
+        document.getElementById('usuario-genero').value = u.genero || '';
         document.getElementById('usuario-activo').value = u.activo.toString();
 
         document.getElementById('form-usuario').style.display = 'block';

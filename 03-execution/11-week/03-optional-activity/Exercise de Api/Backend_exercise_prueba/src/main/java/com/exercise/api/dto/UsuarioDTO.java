@@ -36,4 +36,10 @@ public class UsuarioDTO {
 
     private LocalDateTime fechaRegistro;
     private Boolean activo;
+    
+    @jakarta.validation.constraints.Pattern(
+        regexp = "^(Masculino|Femenino|No Binario)$", 
+        message = "El género solo puede ser: Masculino, Femenino o No Binario"
+    )
+    private String genero;
 }

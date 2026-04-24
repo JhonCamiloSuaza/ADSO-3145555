@@ -53,6 +53,7 @@ public class UsuarioService {
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setTelefono(usuarioDTO.getTelefono());
         usuario.setActivo(usuarioDTO.getActivo());
+        usuario.setGenero(usuarioDTO.getGenero());
 
         Usuario updated = usuarioRepository.save(usuario);
         return usuarioMapper.toDTO(updated);
