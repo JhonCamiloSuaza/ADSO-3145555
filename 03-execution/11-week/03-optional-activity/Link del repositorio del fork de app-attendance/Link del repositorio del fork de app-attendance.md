@@ -1,1 +1,0 @@
-[Repositorio fork app-attendance (rama improve-code)](https://github.com/JhonCamiloSuaza/app-attendance/tree/improve-code)
