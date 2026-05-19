@@ -19,3 +19,6 @@ Repositorio oficial de documentación técnica del proyecto (ADRs, historias de 
 🔗 [https://github.com/JhonCamiloSuaza/Documentacion-Collaborative-Hotel-System](https://github.com/JhonCamiloSuaza/Documentacion-Collaborative-Hotel-System)
 
 ---
+
+## Trello
+🔗 [https://trello.com/b/CIPTGZ05/hotel-system-bd]  (https://trello.com/b/CIPTGZ05/hotel-system-bd)
