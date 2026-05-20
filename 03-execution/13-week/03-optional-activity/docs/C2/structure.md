@@ -1,244 +1,148 @@
-# C2 — Containers
+# C2 — Containers (Contenedores)
 
-## Estructura de Documentación
-
-```txt
-docs/C2
-├── structure.md           # este archivo
-├── containerization.md    # principios de descomposición
-├── diagrams/
-│   ├── minimal.drawio     # MVP
-│   └── full.drawio        # Producción
-├── variants/
-│   ├── minimal/
-│   │   ├── README.md      # MVP: Web UI + API + Database (rápido)
-│   │   ├── architecture.md    # Diagrama ASCII y descripción
-│   │   └── tech_stack.md      # Tecnologías: FastAPI, SQLite
-│   └── full/
-│       ├── README.md      # Producción: +Auth, Worker, Storage, Cache
-│       ├── architecture.md    # Diagrama ASCII detallado
-│       └── scaling_strategy.md
-└── components/
-    ├── web_ui.md          # SPA (React/Vue/Angular)
-    ├── api_server.md      # FastAPI / Node.js
-    ├── database.md        # PostgreSQL o SQLite
-    ├── auth_service.md    # LDAP / OAuth2
-    ├── worker.md          # Background jobs (Celery)
-    ├── cache.md           # Redis / Memcached
-    └── storage.md         # S3 / MinIO
-```
-
-## Por qué C2 es crítico
-
-C2 descompone el sistema en **aplicaciones y almacenes de datos** (contenedores):
-- Define la arquitectura ejecutable (qué procesos corren).
-- Establece límites de escalabilidad independiente.
-- Identifica puntos de fallo crítico.
-- Base para decisiones de tecnología en C3 y C4.
-
----
-
-## Variante 1: MINIMAL (MVP - Prototipo Rápido)
-
-### Arquitectura
+## Variante MVP (Minimal)
 
 ```txt
-┌─────────────────────────────────────────────────────────────┐
-│                    USUARIOS FINALES                         │
-└─────────────────┬───────────────────────────────────────────┘
-                  │ HTTP/HTTPS (puerto 80/443)
-                  ↓
-┌─────────────────────────────────────────────────────────────┐
-│  Web UI (SPA - React/Vue/Angular)                          │
-│  • Interfaz de usuario responsiva                          │
-│  • Validación de datos en cliente                          │
-│  • Comunicación REST con API                               │
-│  Tecnología: Node.js express / Vite dev server             │
-└─────────────────┬───────────────────────────────────────────┘
-                  │ REST API (JSON)
-                  │ endpoints: POST /horarios, GET /horarios/{id}, etc.
-                  ↓
-┌─────────────────────────────────────────────────────────────┐
-│  API Server (FastAPI / Node.js Express / Flask)            │
-│  • Lógica de negocio (validación de conflictos)            │
-│  • Gestión de autenticación con JWT                        │
-│  • Endpoints CRUD para recursos                           │
-│  Tecnología: FastAPI (Python) recomendado                  │
-└─────────────────┬───────────────────────────────────────────┘
-                  │ SQL Queries
-                  │ Connection pooling
-                  ↓
-┌─────────────────────────────────────────────────────────────┐
-│  Database (SQLite para MVP / PostgreSQL producción)         │
-│  • Tablas: Horarios, Instructores, Ambientes, Fichas      │
-│  • Índices en day_of_week, instructor_id, ambiente_id     │
-│  • Relaciones FK entre tablas                             │
-│  Tecnología: SQLite (0 configuración, perfecto para MVP)  │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Responsabilidades por Contenedor
-
-| Contenedor | Responsabilidad | Protocolo | Datos Almacenados |
-|-----------|-----------------|-----------|-------------------|
-| **Web UI** | Renderización, eventos, llamadas API | HTTP REST JSON | Estado local (caché de sesión) |
-| **API** | Lógica de negocio, validación, autorización | HTTP REST / SQL | En memoria (cachés de corta duración) |
-| **Database** | Persistencia de estado, ACID | SQL / JDBC | Tablas: Horarios, Instructores, Ambientes, Fichas |
-
-### Flujo de una Operación (Ejemplo: Crear Horario)
-
-```
-Coordinador: Click "Crear Horario"
-    │
-    ↓
-[Web UI] - Valida campos
-    │
-    ↓ POST /api/horarios { day_of_week, start_time, end_time, instructor_id, ambiente_id, ficha_id }
-[API Server] - Recibe DTO
-    │
-    ├─ Autentica JWT
-    ├─ Valida que instructor, ambiente, ficha existan
-    ├─ Llama ConflictValidator.find_conflicts()
-    │  └─ SELECT * FROM horarios WHERE [intersección]
-    ├─ Si NO hay conflicto: INSERT INTO horarios ...
-    ├─ Si HAY conflicto: Retorna 409 Conflict con detalles
-    │
-    ↓ Response 201 Created {id, horario}
-[Web UI] - Muestra notificación de éxito
+Containers (MVP)
+│
+├── Web UI
+│   ├── Framework: React / Vue / Vite
+│   ├── Lenguaje: JavaScript / TypeScript
+│   ├── Protocolo de salida: HTTP REST JSON
+│   └── Responsabilidades
+│       ├── Renderizar interfaz de usuario
+│       ├── Validar formularios antes de enviar
+│       ├── Gestionar sesión y token JWT
+│       └── Consumir endpoints del API Server
+│
+├── API Server
+│   ├── Framework: FastAPI / Express / Spring Boot
+│   ├── Lenguaje: Python / Node.js / Java
+│   ├── Protocolo de entrada: HTTP REST JSON
+│   ├── Protocolo de salida: SQL Queries
+│   └── Responsabilidades
+│       ├── Lógica de negocio
+│       ├── Validación de conflictos de horarios
+│       ├── Autenticación y generación de JWT
+│       └── Endpoints CRUD (Horarios, Instructores, Ambientes, Fichas)
+│
+└── Database
+    ├── Motor: PostgreSQL / SQLite
+    ├── Tipo: Relacional
+    ├── Protocolo: TCP / SQL
+    ├── Tablas
+    │   ├── Horarios
+    │   ├── Instructores
+    │   ├── Ambientes
+    │   ├── Fichas (Grupos Académicos)
+    │   └── Usuarios
+    └── Índices
+        ├── (day_of_week, instructor_id)
+        ├── (day_of_week, ambiente_id)
+        └── (day_of_week, ficha_id)
 ```
 
 ---
 
-## Variante 2: FULL (Producción - Robusto y Escalable)
-
-### Arquitectura Completa
+## Variante Full (Producción)
 
 ```txt
-┌──────────────────────────────────────────────────────────────────┐
-│                    USUARIOS FINALES                              │
-└──────────────────┬────────────────────────────────────────────────┘
-                   │ HTTP/HTTPS (CDN cachea assets)
-                   ↓
-┌──────────────────────────────────────────────────────────────────┐
-│  Web UI (SPA - React/Vue, servida desde CDN)                    │
-│  • Cache de static assets (CSS, JS, imgs)                       │
-│  • Progressive Web App (offline capability)                     │
-│  Tecnología: Webpack / Vite + CDN (CloudFlare, AWS CloudFront)  │
-└──────────────────┬────────────────────────────────────────────────┘
-                   │ REST API (JSON)
-                   ↓
-┌──────────────────────────────────────────────────────────────────┐
-│  Load Balancer (ej. Nginx, AWS ALB)                             │
-│  • Distribuye tráfico entre N instancias de API Server          │
-│  • Terminación TLS/SSL                                          │
-│  • Health checks                                                │
-└──────────────────┬────────────────────────────────────────────────┘
-        │          │          │
-        ↓          ↓          ↓
-   ┌────────┐ ┌────────┐ ┌────────┐
-   │ API-1  │ │ API-2  │ │ API-N  │  (replicas horizontales)
-   │FastAPI │ │FastAPI │ │FastAPI │  • Cada instancia stateless
-   │:8000   │ │:8001   │ │:800x   │  • Conecta a DB pool + Cache
-   └────────┘ └────────┘ └────────┘
-        │          │          │
-        └──────────┬──────────┘
-                   │ SQL (connection pool)
-                   ├─ Lectura: primaria
-                   └─ Escritura: réplica con failover
-                   ↓
-         ┌─────────────────────────┐
-         │  PostgreSQL Primary     │  (escrituras)
-         │  • Replicación streaming│
-         │  • Índices en horarios  │
-         └────────────┬────────────┘
-                      │ async replication
-                      ↓
-         ┌─────────────────────────┐
-         │  PostgreSQL Replica     │  (lecturas)
-         │  • Read-only            │
-         └─────────────────────────┘
-
-        ┌──────────────────────────────────────┐
-        │  Redis / Memcached (Cache)           │
-        │  • Cache de horarios frecuentes      │
-        │  • Sessions JWT                      │
-        │  • TTL: 1 hora                       │
-        └──────────────────────────────────────┘
-
-        ┌──────────────────────────────────────┐
-        │  Auth Service (LDAP / OAuth2)        │
-        │  • Validación de credenciales        │
-        │  • Generación de JWT                 │
-        └──────────────────────────────────────┘
-
-        ┌──────────────────────────────────────┐
-        │  Background Worker (Celery / RQ)     │
-        │  • Exportación de reportes (PDF/XLS) │
-        │  • Importación de CSV                │
-        │  • Sincronización con ERP (futura)   │
-        └──────────────────────────────────────┘
-
-        ┌──────────────────────────────────────┐
-        │  Object Storage (S3 / MinIO)         │
-        │  • Reportes generados (PDF)          │
-        │  • Backups incrementales             │
-        │  • Exports (CSV, Excel)              │
-        └──────────────────────────────────────┘
-
-        ┌──────────────────────────────────────┐
-        │  Logging & Monitoring                │
-        │  • ELK Stack (Elasticsearch, Kibana) │
-        │  • Prometheus + Grafana              │
-        │  • DataDog / New Relic (optional)    │
-        └──────────────────────────────────────┘
+Containers (Full)
+│
+├── Web UI
+│   ├── Framework: React + Vite
+│   ├── Hosting: CDN (CloudFront / CloudFlare)
+│   ├── Protocolo de salida: HTTPS
+│   └── Características
+│       ├── PWA habilitado (soporte offline)
+│       └── Cache de assets estáticos (CSS, JS, imágenes)
+│
+├── Load Balancer
+│   ├── Tecnología: Nginx / AWS ALB
+│   ├── Protocolo de salida: HTTP interno
+│   └── Responsabilidades
+│       ├── Distribuir tráfico entre réplicas de API
+│       ├── Terminación TLS / SSL
+│       └── Health Checks automáticos
+│
+├── API Server (Réplicas)
+│   ├── Instancia API-1
+│   │   ├── Framework: FastAPI
+│   │   └── Puerto: 8000
+│   ├── Instancia API-2
+│   │   ├── Framework: FastAPI
+│   │   └── Puerto: 8001
+│   ├── Instancia API-N
+│   │   ├── Framework: FastAPI
+│   │   └── Puerto: 800x
+│   └── Características de cada instancia
+│       ├── Stateless (sin estado compartido)
+│       ├── Conecta a Pool de DB
+│       └── Conecta a Redis Cache
+│
+├── Database
+│   ├── PostgreSQL Primary
+│   │   ├── Tipo: Escrituras (INSERT, UPDATE, DELETE)
+│   │   └── Replicación: Streaming hacia Replica
+│   └── PostgreSQL Replica
+│       ├── Tipo: Lecturas (SELECT)
+│       └── Modo: Read-Only
+│
+├── Cache
+│   └── Redis
+│       ├── TTL: 1 hora
+│       ├── Sessions JWT activas
+│       ├── Horarios consultados frecuentemente
+│       └── Resultados de reportes recientes
+│
+├── Auth Service
+│   ├── Tecnología: LDAP / OAuth2
+│   └── Responsabilidades
+│       ├── Validar credenciales del usuario
+│       ├── Generar y firmar tokens JWT
+│       └── Gestionar expiración de sesiones
+│
+├── Background Worker
+│   ├── Tecnología: Celery / RQ
+│   ├── Cola de mensajes: Redis / RabbitMQ
+│   └── Tareas
+│       ├── Exportación de reportes PDF / Excel
+│       ├── Importación masiva de datos desde CSV
+│       ├── Sincronización futura con ERP Institucional
+│       └── Envío de emails de notificación (async)
+│
+├── Object Storage
+│   ├── Tecnología: AWS S3 / MinIO
+│   └── Contenido almacenado
+│       ├── Reportes PDF generados
+│       ├── Exportaciones Excel / CSV
+│       └── Backups incrementales de la base de datos
+│
+└── Logging y Monitoreo
+    ├── ELK Stack
+    │   ├── Elasticsearch  (indexación de logs)
+    │   ├── Logstash       (recolección y parseo)
+    │   └── Kibana         (visualización y dashboards)
+    ├── Prometheus
+    │   ├── Métricas de rendimiento de la API
+    │   └── Alertas por umbral (latencia, errores)
+    └── Grafana
+        └── Dashboards de métricas en tiempo real
 ```
-
-### Responsabilidades en Producción
-
-| Contenedor | Responsabilidad | Tecnología |
-|-----------|-----------------|-------------|
-| **Web UI** | Interfaz, estado local, llamadas API | React + Vite + CDN |
-| **Load Balancer** | Distribuir tráfico, TLS termination | Nginx / AWS ALB |
-| **API Server (N)** | Lógica de negocio, validación | FastAPI (replicas) |
-| **PostgreSQL** | Persistencia ACID, replicación | Primary + Replica |
-| **Cache** | Acelerar lecturas frecuentes | Redis TTL 1h |
-| **Auth Service** | Validar identidades, generar JWT | LDAP / OAuth2 |
-| **Worker** | Reportes, ETL, trabajos async | Celery + RQ |
-| **Object Storage** | Almacenar reportes y backups | S3 / MinIO |
-| **Logging** | Trazabilidad, debugging, alertas | ELK + Prometheus |
-
-### Diferencias MVP ↔ Producción
-
-| Aspecto | MVP | Producción |
-|--------|-----|------------|
-| **Database** | SQLite (1 archivo) | PostgreSQL (replicado) |
-| **API Replicas** | 1 | 3+ (behind load balancer) |
-| **Cache** | None | Redis (1h TTL) |
-| **Auth** | JWT simple en DB | LDAP / OAuth2 service |
-| **Reportes** | Síncronos (esperar) | Background worker async |
-| **Storage** | Filesystem | S3 / MinIO |
-| **Logging** | stdout | ELK Stack + alertas |
-| **Failover** | Manual | Automático |
-| **Escalabilidad** | Vertical | Horizontal |
 
 ---
 
-## Decisiones de Diseño
+## Comparación MVP ↔ Full
 
-### Por qué FastAPI en la capa API
-- Soporte nativo de async/await (I/O-bound operations)
-- Documentación automática Swagger
-- Type hints → validación automática
-- Performance comparable a Go
-
-### Por qué PostgreSQL en producción
-- Soporte de índices complejos (BTREE, GIN)
-- Full-text search para reportes
-- Replicación nativa
-- JSONB para datos semi-estructurados (futuros reportes)
-
-### Por qué Redis para caché
-- Cachea horarios frecuentes (operación de lectura masiva)
-- Sessions JWT → no volver a DB
-- TTL automático (invalida después de 1h)
-- Mejora latencia p95 de API
+```txt
+Aspecto               MVP                             Full
+────────────────────────────────────────────────────────────────────
+Réplicas de API       1 instancia directa             N réplicas + Load Balancer
+Base de Datos         SQLite / PostgreSQL local        PostgreSQL Primary + Replica
+Caché                 Ninguno                         Redis (TTL 1 hora)
+Autenticación         JWT validado localmente en DB   Servicio externo LDAP / OAuth2
+Generación Reportes   Síncrona (bloquea el hilo)      Asíncrona (Background Worker)
+Almacenamiento        Disco local del servidor        Object Storage 
+Monitoreo de Logs     stdout (consola del servidor)   ELK Stack + Prometheus + Grafana
+Failover              Reinicio manual                 Recuperación automática
+```

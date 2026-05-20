@@ -1,75 +1,172 @@
 # C4 — Code (Nivel de Implementación)
 
-## Estructura de Documentación
+## Estructura: Módulo Horarios (ByModule - Recomendado)
 
 ```txt
-docs/C4
-├── structure.md           # este archivo
-├── guidelines.md          # criterios: qué documentar a nivel código
-├── algorithms/
-│   ├── conflict-detection.md     # pseudocódigo del motor crítico
-│   └── time-slot-overlap.md      # matemática de intervalos
-└── modules/
-    └── horarios/                 # Módulo crítico: Sistema de Horarios
-        ├── README.md             # descripción del módulo
-        ├── erd.md                # modelo de datos (entidades y relaciones)
-        ├── class_diagram.md      # componentes (Entity, Repository, Service...)
-        ├── data_flow.md          # flujos de datos y transformaciones
-        ├── implementation_notes.md
-        └── src/                  # Estructura REAL del código (ByModule)
-            ├── entity/
-            │   ├── Horario.py           # @dataclass o SQLAlchemy Model
-            │   └── __init__.py
-            ├── repository/
-            │   ├── IHorarioRepository.py   # Interfaz abstracta
-            │   ├── HorarioRepository.py    # Implementación ORM
-            │   └── __init__.py
-            ├── service/
-            │   ├── IHorarioService.py      # Interfaz abstracta
-            │   ├── HorarioService.py       # Lógica de negocio
-            │   └── __init__.py
-            ├── controller/
-            │   ├── HorarioController.py    # Endpoints REST
-            │   └── __init__.py
-            ├── dto/
-            │   ├── HorarioDTO.py           # Request/Response models (Pydantic)
-            │   ├── HorarioMapper.py        # Mapeo Entity ↔ DTO
-            │   └── __init__.py
-            ├── utils/
-            │   ├── ConflictValidator.py    # Algoritmo de detección (CRÍTICO)
-            │   ├── TimeUtils.py            # Utilidades de horarios
-            │   └── __init__.py
-            ├── exceptions/
-            │   ├── ScheduleConflictError.py
-            │   ├── InvalidHorarioError.py
-            │   └── __init__.py
-            └── __init__.py
+Horarios Module
+│
+├── Entity
+│   ├── atributos
+│   │   ├── id: int (PK)
+│   │   ├── day_of_week: int (0-4: Lun-Vie)
+│   │   ├── start_time: time
+│   │   ├── end_time: time
+│   │   ├── instructor_id: int (FK)
+│   │   ├── ambiente_id: int (FK)
+│   │   ├── ficha_id: int (FK)
+│   │   ├── created_at: datetime
+│   │   └── updated_at: datetime
+│   ├── constructor
+│   ├── Getter (para cada atributo)
+│   ├── Setter (para cada atributo)
+│   ├── validate()  # validaciones básicas
+│   └── to_dict()   # serialización
+│
+├── IRepository (Interfaz)
+│   ├── save(horario: Horario) → Horario
+│   ├── update(id: int, horario: Horario) → Horario
+│   ├── delete(id: int) → bool
+│   ├── findById(id: int) → Horario?
+│   ├── findAll() → List[Horario]
+│   ├── findByDay(day: int) → List[Horario]
+│   └── find_conflicts(horario: Horario) → List[Horario]  CRÍTICA
+│
+├── Repository (Implementación ORM)
+│   ├── Implementa: IRepository
+│   ├── save(horario) → INSERT INTO horarios
+│   ├── update(id, horario) → UPDATE horarios
+│   ├── delete(id) → DELETE FROM horarios
+│   ├── findById(id) → SELECT * FROM horarios WHERE id = ?
+│   ├── findAll() → SELECT * FROM horarios
+│   ├── findByDay(day) → SELECT * WHERE day_of_week = ? [índice compuesto]
+│   └── find_conflicts(horario) 
+│       ├── SELECT * FROM horarios
+│       ├── WHERE day_of_week = :day
+│       ├── AND NOT (end_time <= :start OR start_time >= :end)
+│       ├── AND (instructor_id = :instr OR ambiente_id = :amb OR ficha_id = :ficha)
+│       └── Retorna: List[Horario] con conflictos
+│
+├── IService (Interfaz)
+│   ├── create(dto: HorarioDTO) → Horario
+│   ├── validate_and_create(dto: HorarioDTO) → Horario  CRÍTICA
+│   ├── update(id: int, dto: HorarioDTO) → Horario
+│   ├── delete(id: int) → bool
+│   ├── getById(id: int) → Horario?
+│   ├── getAll() → List[Horario]
+│   ├── getByInstructor(instructor_id: int) → List[Horario]
+│   ├── getByAmbiente(ambiente_id: int) → List[Horario]
+│   └── calculate_occupancy() → float (%)
+│
+├── Service (Lógica de Negocio)
+│   ├── Implementa: IService
+│   ├── Inyecta: repository, conflict_validator
+│   │
+│   ├── validate_and_create(dto: HorarioDTO) 
+│   │   ├── 1. Valida estructura del DTO
+│   │   ├── 2. Verifica FK: instructor, ambiente, ficha existen
+│   │   ├── 3. Llama: repository.find_conflicts(dto)
+│   │   ├── 4. Si hay conflictos → raise ApplicationError(409)
+│   │   ├── 5. Si OK → repository.save()
+│   │   └── 6. Retorna: Entity con id asignado
+│   │
+│   ├── update(id: int, dto: HorarioDTO)
+│   │   ├── 1. Obtiene Entity actual
+│   │   ├── 2. Valida nuevo DTO
+│   │   ├── 3. Si campos críticos cambiaron → check_conflicts
+│   │   ├── 4. Si OK → repository.update()
+│   │   └── 5. Retorna: Entity actualizado
+│   │
+│   ├── getByInstructor(instructor_id)
+│   │   ├── Retorna: horarios del instructor
+│   │   └── Cálculo de carga horaria
+│   │
+│   └── calculate_occupancy()
+│       ├── slots_used = COUNT(*) FROM horarios
+│       ├── total_slots = 5 días × 24 horas / duración_promedio
+│       ├── occupancy = slots_used / total_slots
+│       └── target: ≥ 75%
+│
+├── Controller (HTTP Endpoints)
+│   ├── Inyecta: service
+│   │
+│   ├── POST /horarios
+│   │   ├── Recibe: HorarioDTO (raw JSON)
+│   │   ├── Auth: Verifica JWT válido
+│   │   ├── Autoriza: coordinador o admin
+│   │   ├── Valida: estructura y campos obligatorios
+│   │   ├── Llama: service.validate_and_create(dto)
+│   │   ├── Si error → 409 Conflict {error, conflicts_list}
+│   │   └── Si OK → 201 Created {id, horario}
+│   │
+│   ├── GET /horarios/{id}
+│   │   ├── Autoriza: cualquier usuario autenticado
+│   │   ├── Llama: service.getById(id)
+│   │   └── Retorna: 200 OK {horario}
+│   │
+│   ├── PUT /horarios/{id}
+│   │   ├── Recibe: HorarioDTO (partial update)
+│   │   ├── Valida: no crear conflictos con update
+│   │   ├── Llama: service.update(id, dto)
+│   │   └── Retorna: 200 OK {updated_horario}
+│   │
+│   ├── DELETE /horarios/{id}
+│   │   ├── Verifica: no está siendo usado
+│   │   ├── Llama: service.delete(id)
+│   │   └── Retorna: 204 No Content
+│   │
+│   └── GET /horarios?day=0&instructor_id=5&ambiente_id=101
+│       ├── Query params con filtros
+│       ├── Llama: service.getByDay() / service.getByInstructor()
+│       └── Retorna: 200 OK [horarios]
+│
+├── DTO
+│   ├── HorarioRequestDTO
+│   │   ├── atributos
+│   │   │   ├── day_of_week: int (1-4)
+│   │   │   ├── start_time: str ("HH:MM:SS")
+│   │   │   ├── end_time: str ("HH:MM:SS")
+│   │   │   ├── instructor_id: int
+│   │   │   ├── ambiente_id: int
+│   │   │   └── ficha_id: int
+│   │   ├── constructor
+│   │   ├── Getter
+│   │   └── Setter
+│   │
+│   └── HorarioResponseDTO
+│       ├── atributos
+│       │   ├── day_of_week: int
+│       │   ├── start_time: str
+│       │   ├── end_time: str
+│       │   ├── instructor_id: int
+│       │   ├── ambiente_id: int
+│       │   ├── ficha_id: int
+│       │   ├── id: int
+│       │   ├── created_at: datetime (ISO8601)
+│       │   └── updated_at: datetime (ISO8601)
+│       ├── constructor
+│       ├── Getter
+│       └── Setter
+│
+├── IDTO
+│   ├── entityToDTO()
+│   ├── dtoToEntity()
+│   └── mapper()
+│
+├── Utils
+│   └── ConflictValidator
+│
+└── Exceptions
+    ├── ScheduleConflictError
+    │   ├── mensaje: "Instructor XX ya asignado Lunes 09:00-10:30"
+    │   └── conflicting_horarios: List[Horario]
+    │
+    └── InvalidHorarioError
+        ├── mensaje: "start_time no puede ser >= end_time"
+       
 ```
-
-### Mapeo: Documentación ↔ Código Real
-
-| Documentación | Código Real | Propósito |
-|---------------|------------|----------|
-| `erd.md` | `entity/Horario.py` | Atributos, tipos, relaciones FK |
-| `class_diagram.md` | `repository/`, `service/`, `controller/` | Interfaces, implementaciones, dependencias |
-| `data_flow.md` | Flujo completo HTTP → ORM | End-to-end de POST /horarios |
-| `implementation_notes.md` | `utils/ConflictValidator.py` | Algoritmo optimizado con índices |
-
-## Por qué C4 es Crítico
-
-C4 documenta la **implementación de componentes críticos** a nivel código:
-- Modelo de datos (entidades, relaciones, índices).
-- Arquitectura de capas por módulo.
-- Algoritmos complejos (validación de conflictos).
-- Flujos de transformación de datos.
-
-**Solo documentamos módulos críticos** para la integridad del sistema. En este caso: `horarios`, porque todas las funciones de negocio dependen de que la detección de conflictos sea correcta.
 
 ---
 
-## Módulo HORARIOS (Crítico)
-
-### 1. Entity-Relationship Diagram (ERD)
 
 ```txt
 ┌──────────────────────────┐
@@ -275,52 +372,10 @@ RELACIONES:
 ╚════════════════════════════════════════════════════════════════╝
 ```
 
-### 3. Algoritmo Crítico: Detección de Conflictos
-
-#### Matemática de Solapamiento de Intervalos
-
-```
-Dos intervalos [start1, end1] y [start2, end2] se solapan SÍ Y SOLO SÍ:
-  start1 < end2 AND start2 < end1
-
-Dicho de otra forma, NO se solapan si:
-  end1 <= start2  OR  start1 >= end2
-                  ↓
-       Por lo tanto SÍ se solapan si:
-  NOT (end1 <= start2  OR  start1 >= end2)
-
-Ejemplo 1:
-  Horario A: Lunes 09:00 - 10:00
-  Horario B: Lunes 09:30 - 10:30
-  ¿Solapan? SÍ (ambos usan el aula en 09:30-10:00)
-
-Ejemplo 2:
-  Horario A: Lunes 09:00 - 10:00
-  Horario B: Lunes 10:00 - 11:00
-  ¿Solapan? NO (A termina exactamente cuando B comienza)
-
-Ejemplo 3:
-  Horario A: Lunes 09:00 - 10:00
-  Horario B: Martes 09:00 - 10:00
-  ¿Solapan? NO (días diferentes)
-```
 
 
-#### Complejidad y Performance
 
-```
-Sin optimización (búsqueda lineal):
-  - Complejidad: O(n * m) donde n=horarios del día, m=conflictos
-  - Con 1000 horarios/día: muy lento (inaceptable)
 
-Con índices compuestos:
-  - Complejidad: O(log n + k) donde k=conflictos encontrados
-  - Con 1000 horarios/día y 10 conflictos: ~20ms ✓
-
-Métrica de éxito:
-  - Latencia p95 de create_horario: < 200ms
-  - Incluye: validación + detección + insert
-```
 
 ### 4. Flujo de Datos (End-to-End)
 
