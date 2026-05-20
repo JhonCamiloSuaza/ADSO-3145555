@@ -1,4 +1,4 @@
-# 🏨 Collaborative Hotel System — Semana 12 · Actividad Opcional
+# 🏨 Collaborative Hotel System — Semana 13 · Actividad Opcional
 
 Este documento centraliza los enlaces principales del proyecto **Collaborative Hotel System**, incluyendo el repositorio de código fuente, los scripts de base de datos y la documentación técnica.
 
@@ -19,6 +19,5 @@ Repositorio oficial de documentación técnica del proyecto (ADRs, historias de 
 🔗 [https://github.com/JhonCamiloSuaza/Documentacion-Collaborative-Hotel-System](https://github.com/JhonCamiloSuaza/Documentacion-Collaborative-Hotel-System)
 
 ---
-
 ## Trello
 🔗 [https://trello.com/b/CIPTGZ05/hotel-system-bd]  (https://trello.com/b/CIPTGZ05/hotel-system-bd)
