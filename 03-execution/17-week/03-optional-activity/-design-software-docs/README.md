@@ -1,4 +1,4 @@
-# esign-software-docs
+# Design-software-docs
 
 Repositorio de documentación senior de arquitectura del software para el proyecto **Horarios SENA**, orientado a la gobernanza nacional de SENA.
 
