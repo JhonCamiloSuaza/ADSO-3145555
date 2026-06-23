@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-dml-seed-data
+      author: gps-guardian-escolar
+      logicalFilePath: 02_dml/00_inserts/001_seed.sql
+      labels: "dml,seed,inserts"
+      comment: Loads seed data from the project DML script.
+      changes:
+        - sqlFile:
+            path: 001_seed.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/02_dml/00_inserts/001_seed.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

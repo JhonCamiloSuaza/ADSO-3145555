@@ -1,0 +1,15 @@
+DROP TRIGGER IF EXISTS trg_recibonotificacion_actualizadoen ON ReciboNotificacion;
+DROP TRIGGER IF EXISTS trg_configuracionnotificacion_actualizadoen ON ConfiguracionNotificacion;
+DROP TRIGGER IF EXISTS trg_coordenada_actualizadoen ON Coordenada;
+DROP TRIGGER IF EXISTS trg_trayecto_actualizadoen ON Trayecto;
+DROP TRIGGER IF EXISTS trg_zonasegura_actualizadoen ON ZonaSegura;
+DROP TRIGGER IF EXISTS trg_configuracionseguridad_actualizadoen ON ConfiguracionSeguridad;
+DROP TRIGGER IF EXISTS trg_politicacontrasena_actualizadoen ON PoliticaContrasena;
+DROP TRIGGER IF EXISTS trg_sesionusuario_actualizadoen ON SesionUsuario;
+DROP TRIGGER IF EXISTS trg_permiso_actualizadoen ON Permiso;
+DROP TRIGGER IF EXISTS trg_rol_actualizadoen ON Rol;
+DROP TRIGGER IF EXISTS trg_parada_actualizadoen ON Parada;
+DROP TRIGGER IF EXISTS trg_ruta_actualizadoen ON Ruta;
+DROP TRIGGER IF EXISTS trg_contactoemergencia_actualizadoen ON ContactoEmergencia;
+DROP TRIGGER IF EXISTS trg_estudiante_actualizadoen ON Estudiante;
+DROP TRIGGER IF EXISTS trg_usuario_actualizadoen ON Usuario;

@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS ReciboNotificacion CASCADE;
+DROP TABLE IF EXISTS Notificacion CASCADE;
+DROP TABLE IF EXISTS ConfiguracionNotificacion CASCADE;

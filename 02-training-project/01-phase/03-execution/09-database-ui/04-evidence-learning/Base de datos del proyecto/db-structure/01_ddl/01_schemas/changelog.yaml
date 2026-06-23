@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001b-ddl-public-schema
+      author: gps-guardian-escolar
+      logicalFilePath: 01_ddl/01_schemas/001_public_schema.sql
+      labels: "ddl,schema,postgresql"
+      comment: Declares the public schema used by the project database model.
+      changes:
+        - sqlFile:
+            path: 001_public_schema.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/01_schemas/001_public_schema.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

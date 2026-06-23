@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004t-ddl-create-updated-at-triggers
+      author: gps-guardian-escolar
+      logicalFilePath: 01_ddl/08_triggers/001_updated_at_triggers.sql
+      labels: "ddl,triggers,audit"
+      comment: Creates triggers that keep ActualizadoEn consistent on updates.
+      changes:
+        - sqlFile:
+            path: 001_updated_at_triggers.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/08_triggers/001_updated_at_triggers.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

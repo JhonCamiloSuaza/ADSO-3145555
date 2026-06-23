@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-dcl-create-database-roles
+      author: gps-guardian-escolar
+      logicalFilePath: 03_dcl/00_roles/001_create_database_roles.sql
+      labels: "dcl,roles"
+      comment: Creates database-level roles for application and read-only access.
+      changes:
+        - sqlFile:
+            path: 001_create_database_roles.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/03_dcl/00_roles/001_create_database_roles.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

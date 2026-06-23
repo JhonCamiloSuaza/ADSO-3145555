@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004v-ddl-create-domain-views
+      author: gps-guardian-escolar
+      logicalFilePath: 01_ddl/04_views/001_domain_views.sql
+      labels: "ddl,views,read-models"
+      comment: Creates read-only views for student routes, trip history and notification history.
+      changes:
+        - sqlFile:
+            path: 001_domain_views.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/04_views/001_domain_views.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

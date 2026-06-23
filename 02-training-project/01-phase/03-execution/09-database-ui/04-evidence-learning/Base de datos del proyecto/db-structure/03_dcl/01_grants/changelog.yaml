@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-dcl-grant-application-permissions
+      author: gps-guardian-escolar
+      logicalFilePath: 03_dcl/01_grants/001_grant_application_permissions.sql
+      labels: "dcl,grants"
+      comment: Grants database privileges to project database roles.
+      changes:
+        - sqlFile:
+            path: 001_grant_application_permissions.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/03_dcl/01_grants/001_grant_application_permissions.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

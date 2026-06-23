@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-ddl-create-indexes
+      author: gps-guardian-escolar
+      logicalFilePath: 01_ddl/09_indexes/001_indexes.sql
+      labels: "ddl,indexes,performance"
+      comment: Creates indexes defined by the documented relational model.
+      changes:
+        - sqlFile:
+            path: 001_indexes.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/09_indexes/001_indexes.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

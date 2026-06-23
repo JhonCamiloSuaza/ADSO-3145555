@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005a-ddl-operational-materialized-views
+      author: gps-guardian-escolar
+      logicalFilePath: 01_ddl/05_materialized_views/001_operational_materialized_views.sql
+      labels: "ddl,materialized-views,reporting"
+      comment: Creates derived materialized views for operational summaries without adding base tables.
+      changes:
+        - sqlFile:
+            path: 001_operational_materialized_views.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/05_materialized_views/001_operational_materialized_views.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

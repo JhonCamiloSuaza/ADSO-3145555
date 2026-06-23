@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-ddl-create-enums
+      author: gps-guardian-escolar
+      logicalFilePath: 01_ddl/02_types/001_enums.sql
+      labels: "ddl,types,enums"
+      comment: Creates PostgreSQL enum types used by the documented relational model.
+      changes:
+        - sqlFile:
+            path: 001_enums.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/02_types/001_enums.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

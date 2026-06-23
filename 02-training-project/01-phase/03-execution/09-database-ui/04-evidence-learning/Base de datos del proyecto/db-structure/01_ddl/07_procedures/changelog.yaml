@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004p-ddl-create-operational-procedures
+      author: gps-guardian-escolar
+      logicalFilePath: 01_ddl/07_procedures/001_operational_procedures.sql
+      labels: "ddl,procedures,audit,notifications"
+      comment: Creates operational procedures for activity logging and notification reads.
+      changes:
+        - sqlFile:
+            path: 001_operational_procedures.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/07_procedures/001_operational_procedures.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

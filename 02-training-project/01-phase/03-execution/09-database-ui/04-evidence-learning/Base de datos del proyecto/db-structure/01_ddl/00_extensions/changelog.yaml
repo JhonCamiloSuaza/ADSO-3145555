@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-ddl-extension-pgcrypto
+      author: gps-guardian-escolar
+      logicalFilePath: 01_ddl/00_extensions/001_pgcrypto.sql
+      labels: "ddl,extension,postgresql"
+      comment: Enables pgcrypto for UUID generation with gen_random_uuid().
+      changes:
+        - sqlFile:
+            path: 001_pgcrypto.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/00_extensions/001_pgcrypto.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

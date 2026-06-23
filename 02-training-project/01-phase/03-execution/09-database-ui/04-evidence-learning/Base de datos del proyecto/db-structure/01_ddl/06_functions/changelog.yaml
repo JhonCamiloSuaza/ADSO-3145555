@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004f-ddl-create-database-functions
+      author: gps-guardian-escolar
+      logicalFilePath: 01_ddl/06_functions/001_database_functions.sql
+      labels: "ddl,functions,audit,gps"
+      comment: Creates shared timestamp and GPS distance functions.
+      changes:
+        - sqlFile:
+            path: 001_database_functions.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/06_functions/001_database_functions.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            endDelimiter: ;
+            stripComments: false

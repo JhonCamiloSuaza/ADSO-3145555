@@ -1,0 +1,3 @@
+REFRESH MATERIALIZED VIEW mv_estudiantes_operacion;
+REFRESH MATERIALIZED VIEW mv_rutas_operacion;
+REFRESH MATERIALIZED VIEW mv_notificaciones_usuario_resumen;
