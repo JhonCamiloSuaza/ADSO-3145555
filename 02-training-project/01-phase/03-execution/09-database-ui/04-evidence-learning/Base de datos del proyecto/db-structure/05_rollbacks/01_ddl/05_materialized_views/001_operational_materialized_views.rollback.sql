@@ -1,3 +1,0 @@
-DROP MATERIALIZED VIEW IF EXISTS mv_notificaciones_usuario_resumen CASCADE;
-DROP MATERIALIZED VIEW IF EXISTS mv_rutas_operacion CASCADE;
-DROP MATERIALIZED VIEW IF EXISTS mv_estudiantes_operacion CASCADE;
